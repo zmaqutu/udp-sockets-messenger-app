@@ -17,27 +17,21 @@
 *A multi-threaded implementation of a waterflow simulation that shows how water flows on a terrain flows downhill.*
 ## Live Demo
 A live interactive demo can be found [below](https://zmaqutu.github.io/3D-Pathfinding-Visualizer/).
-<img src="./readme_assets/WaterflowDemo.gif" width="100%">
+<img src="./location/of/some/image.gif" width="100%">
 
 ## Features
 * **Display** <br>
-&emsp;A main display window that shows the landscape as a greyscale image, with black
-representing the lowest elevation and white the highest. Overlaid on this should be an
-image representing the locations of water in blue. Note that although the water will
-have a depth, represented as an integer value, the colouring is the same uniform blue
-for any depth value greater than zero.
+&emsp;SOME RANDOM TEXT EXPLAINING A FEATURE.<br>                                                
+&emsp;ANOTHER ONE.<br>    
+
 
 * **Buttons** <br>
-&emsp;A ‘reset’ button that zeroes both the water depth across the entire landscape and the
-timestep count.<br>
-&emsp;A ‘pause’ button that temporarily stops the simulation. <br>
-&emsp;A ‘play’ button that either starts the simulation or allows it to continue running if it was previously paused.<br>
-&emsp;An ‘end’ button that closes the window and exits the program.<br>
+for any depth value greater than zero.
+for any depth value greater than zero.
+&emsp;SOME RANDOM TEXT EXPLAINING A FEATURE.<br>
+&emsp;ANOTHER ONE.<br> 
 
 
-* **Multi-threaded processing** <br>
-&emsp;The simulation is carried out by four threads each responsible for processing a random but final portion of the points on the list of grid positions.These threads are synchronised on each timestep. That is, no thread is ever allowed to start the next timestep of simulation before all others are complete. The program exhibits “fluid conservation”. Water can only be created through user mouse input and destroyed by reaching the boundary. The simulation itself is
-only responsible for moving water over the terrain.
 
 
 ### Libraries Used
@@ -53,9 +47,7 @@ make runMedium      //Runs simulation with medium terrain (512x512 dimensions)
 ```
 
 ## Future Scope
-* Add testing scripts to find and remove bugs
-* Add a counter that displays the number of timesteps since the start of the simulation 
-* Add scripts to randomly generate terrains of any size for testing
+* Add some stuff here
 
 <p align="center">Made with ❤️ with good ol' vim</p>
 
