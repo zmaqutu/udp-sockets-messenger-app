@@ -20,7 +20,7 @@ public class MessengerApp {
 		frame.setVisible(true);			//set the frame as visible
 
 	}
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception{
 
 		System.out.println("Back to Java code");
 		//setupGUI();
@@ -34,9 +34,9 @@ public class MessengerApp {
 
 		//Datagram Packet's constructor takes three agruments
 		//data
-		byte [] data = (numberToSend + "").getBytes();
+		byte [] data = String.valueOf(numberToSend).getBytes();
 		//dataLength
-		dataLength = data.length;
+		int dataLength = data.length;
 		//ipAddress
 		InetAddress ia = InetAddress.getLocalHost();
 		//portNumber
@@ -44,7 +44,7 @@ public class MessengerApp {
 		ds.send(dp);
 
 		//After sending, accept response
-		byte [] dataToRecieve new byte[1024];
+		byte [] dataToRecieve = new byte[1024];
 		DatagramPacket dp1 = new DatagramPacket(data,data.length);
 		ds.receive(dp1);
 

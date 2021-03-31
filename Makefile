@@ -29,6 +29,9 @@ clean:
 runMessenger:
 	@java -cp bin MessengerApp
 
+runServer:
+	@java -cp bin UDPServer
+
 #Write a section that will generate and clean Javadoc 
 
 docs:
