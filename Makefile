@@ -26,12 +26,8 @@ clean:
 
 #to run the makefile with arguments use the command 'make SequentialBasins ARGS="YOUR ARGUMENTS"'or ParallelBasins ARGS = "YOUR ARGUMENTS"
 
-runLarge:
-	@java -cp bin Flow  "data/largesample_in.txt"
-
-
-runMedium:
-	@java -cp bin Flow "data/medsample_in.txt"
+runMessenger:
+	@java -cp bin MessengerApp
 
 #Write a section that will generate and clean Javadoc 
 
