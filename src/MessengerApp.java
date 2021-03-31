@@ -25,7 +25,7 @@ public class MessengerApp {
 		System.out.println("Back to Java code");
 		//setupGUI();
 		//
-		DatagramSocket ds = new DatagramSocket(); 
+		DatagramSocket clientSocket = new DatagramSocket(); 
 		
 		int numberToSend = 8;
 
@@ -38,17 +38,17 @@ public class MessengerApp {
 		//dataLength
 		int dataLength = data.length;
 		//ipAddress
-		InetAddress ia = InetAddress.getLocalHost();
+		InetAddress IP = InetAddress.getLocalHost();
 		//portNumber
-		DatagramPacket dp = new DatagramPacket(data,dataLength,ia,9999);
-		ds.send(dp);
+		DatagramPacket sendPacket = new DatagramPacket(data,dataLength,IP,9999);
+		clientSocket.send(sendPacket);
 
 		//After sending, accept response
-		byte [] dataToRecieve = new byte[1024];
-		DatagramPacket dp1 = new DatagramPacket(data,data.length);
-		ds.receive(dp1);
+		byte [] dataToReceive = new byte[1024];
+		DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
+		clientSocket.receive(receivePacket);
 
-		String str = new String(dp1.getData());
+		String str = new String(receivePacket.getData());
 
 		System.out.println("Result is: " + str);
 

@@ -1,3 +1,4 @@
+import java.io.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -5,15 +6,19 @@ public class UDPServer {
 
 	public static void main(String [] args) throws Exception{
 		//socket to accept data at port 9999
-		DatagramSocket ds = new DatagramSocket(9999);
+		DatagramSocket serverSocket = new DatagramSocket(9999);
 
 		
 		byte [] dataReceived = new byte[1024];
 		//To use a socket we use DatagramSocket 
 		//to send / recieve the data we use DatagramPackets
-		DatagramPacket dp = new DatagramPacket(dataReceived,dataReceived.length);
-		ds.receive(dp);
-		String str = new String(dp.getData());
+		DatagramPacket receivePacket = new DatagramPacket(dataReceived,dataReceived.length);
+		serverSocket.receive(receivePacket);
+		String str = new String(receivePacket.getData());
+		
+		System.out.println("IP Address is: " + receivePacket.getAddress());
+		System.out.println("PortNumber is: " + receivePacket.getPort());
+
 
 		int num = Integer.parseInt(str.trim());
 		int square = num*num;
@@ -23,9 +28,10 @@ public class UDPServer {
                 //dataLength
                 int dataLength = dataToSendBack.length;
                 //ipAddress
-                InetAddress ia = InetAddress.getLocalHost();
+                InetAddress IP = receivePacket.getAddress();
                 //portNumber
-                DatagramPacket dp1 = new DatagramPacket(dataToSendBack,dataLength,ia,dp.getPort());
-                ds.send(dp1);
+		int portNo = receivePacket.getPort();
+                DatagramPacket sendPacket = new DatagramPacket(dataToSendBack,dataLength,IP,portNo);
+                serverSocket.send(sendPacket);
 	}
 }
