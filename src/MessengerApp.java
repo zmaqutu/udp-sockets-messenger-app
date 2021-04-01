@@ -31,26 +31,27 @@ public class MessengerApp {
 
 		//convert number to send to an array of bytes
 		
+		while(true){
+			//Datagram Packet's constructor takes three agruments
+			//data
+			byte [] data = String.valueOf(numberToSend).getBytes();
+			//dataLength
+			int dataLength = data.length;
+			//ipAddress
+			InetAddress IP = InetAddress.getLocalHost();
+			//portNumber
+			DatagramPacket sendPacket = new DatagramPacket(data,dataLength,IP,9999);
+			clientSocket.send(sendPacket);
 
-		//Datagram Packet's constructor takes three agruments
-		//data
-		byte [] data = String.valueOf(numberToSend).getBytes();
-		//dataLength
-		int dataLength = data.length;
-		//ipAddress
-		InetAddress IP = InetAddress.getLocalHost();
-		//portNumber
-		DatagramPacket sendPacket = new DatagramPacket(data,dataLength,IP,9999);
-		clientSocket.send(sendPacket);
+			//After sending, accept response
+			byte [] dataToReceive = new byte[1024];
+			DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
+			clientSocket.receive(receivePacket);
 
-		//After sending, accept response
-		byte [] dataToReceive = new byte[1024];
-		DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
-		clientSocket.receive(receivePacket);
+			String str = new String(receivePacket.getData());
 
-		String str = new String(receivePacket.getData());
-
-		System.out.println("Result is: " + str);
+			System.out.println("Server: " + str);
+		}
 
 	
 	}
