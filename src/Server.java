@@ -58,6 +58,16 @@ public class Server Extends JFrame{
 
 
 	}
+	//this method creates a new thread that appends a message to the gui
+	public void showMessage(final String message){
+		SwingUtilities.invokeLater(
+				new Runnable(){
+					public void run(){
+						chatWindow.append(message);
+					}
+				}
+		);
+	}
 	
 	
 }
