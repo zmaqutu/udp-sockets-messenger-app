@@ -2,11 +2,13 @@ import java.io.*;
 import java.util.Scanner;
 import java.awt.*;
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
-public class Server Extends JFrame{
+public class Server extends JFrame{
 	private JTextField userText;
 	private JTextArea chatWindow;
 	private DatagramSocket serverSocket;
@@ -43,7 +45,7 @@ public class Server Extends JFrame{
 					//close();
 				}
 			}
-		}catch (IOExceotion e){
+		}catch (IOException e){
 			e.printStackTrace();
 		}
 	}
@@ -56,13 +58,13 @@ public class Server Extends JFrame{
 
 		//String receivedMessage = String(receivePacket.getData());
 		//showMessage(receivedMessage1);
-		showMessage("Client: " + new String(packet.getData()));
+		showMessage("Client: " + new String(receivePacket.getData()));
 		return receivePacket; 
 
 
 	}
 	//this method sends a message to connected clients
-	private void sendMessage(String message, DatagramPacket packet){
+	private void sendMessage(String message, DatagramPacket packet) throws IOException{
 		//String message = new String(packet.getData());
 		
 		byte [] dataToSend = packet.getData();
@@ -79,7 +81,7 @@ public class Server Extends JFrame{
 		SwingUtilities.invokeLater(
 				new Runnable(){
 					public void run(){
-						chatWindow.append(message);
+						chatWindow.append(message + "\n");
 					}
 				}
 		);
