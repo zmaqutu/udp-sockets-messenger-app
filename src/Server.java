@@ -1,11 +1,13 @@
 import java.io.*;
 import java.util.Scanner;
+import java.awt.*;
+import javax.swing.*;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 public class Server Extends JFrame{
-	private JTextField userInput;
+	private JTextField userText;
 	private JTextArea chatWindow;
 	private DatagramSocket serverSocket;
 
@@ -16,7 +18,7 @@ public class Server Extends JFrame{
 		userText.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent event){
-					sendMessage(event.getActionCommand());
+					showMessage("Server: " + event.getActionCommand());		//using showMessage temporarily
 					userText.setText("");
 				}
 			} 
@@ -38,7 +40,7 @@ public class Server Extends JFrame{
 				}catch(EOFException e){
 					showMessage("\n Server Ended the Connection");
 				}finally{
-					close();
+					//close();
 				}
 			}
 		}catch (IOExceotion e){
@@ -54,9 +56,23 @@ public class Server Extends JFrame{
 
 		//String receivedMessage = String(receivePacket.getData());
 		//showMessage(receivedMessage1);
-		return receivePacket;
+		showMessage("Client: " + new String(packet.getData()));
+		return receivePacket; 
 
 
+	}
+	//this method sends a message to connected clients
+	private void sendMessage(String message, DatagramPacket packet){
+		//String message = new String(packet.getData());
+		
+		byte [] dataToSend = packet.getData();
+		int dataLength = dataToSend.length;
+		InetAddress IP = packet.getAddress();
+		int portNo = packet.getPort();
+
+		DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
+		serverSocket.send(sendPacket);
+		showMessage(message);
 	}
 	//this method creates a new thread that appends a message to the gui
 	public void showMessage(final String message){
