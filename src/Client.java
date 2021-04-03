@@ -11,7 +11,7 @@ import java.net.InetAddress;
 public class Client extends JFrame{
         private JTextField userText;
         private JTextArea chatWindow;
-        //private static DatagramSocket clientSocket;
+        private DatagramSocket clientSocket;
 	private String serverIP;
 	private int i = 8;
 
@@ -24,7 +24,7 @@ public class Client extends JFrame{
                 userText.addActionListener(
                         new ActionListener(){
                                 public void actionPerformed(ActionEvent event){
-					//sendMessage(event.getActionCommand());	
+					sendMessage(event.getActionCommand());	
                                         userText.setText("");
                                 }
                         } 
@@ -38,15 +38,18 @@ public class Client extends JFrame{
 	//setup and run the server, this will be called after GUI is setup
         public void startRunning()throws IOException{
                 
-		DatagramSocket clientSocket = new DatagramSocket();
+		clientSocket = new DatagramSocket();
+		Scanner scan = new Scanner(System.in);
                 while(true){
-			int numberToSend = 8;
+			/*String message = scan.nextLine();
                         //Datagram Packet's constructor takes three agruments data, dataLength,IP address, PortNumber
-			byte [] data = String.valueOf(numberToSend).getBytes();
+			byte [] data = message.getBytes();
                         int dataLength = data.length;
                         InetAddress IP = InetAddress.getLocalHost();
                         DatagramPacket sendPacket = new DatagramPacket(data,dataLength,IP,9999);
                         clientSocket.send(sendPacket);
+
+			System.out.println("Client: " + message);*/
 
                         //After sending, accept response
                 	byte [] dataToReceive = new byte[1024];
@@ -55,7 +58,9 @@ public class Client extends JFrame{
 
                         String str = new String(receivePacket.getData());
 
-                        System.out.println("Server: " + str);
+                        System.out.println("Client is getting packets from: " + receivePacket.getAddress());
+			showMessage("Server: " + str);
+			//System.out.println("Server: " + str);
                 }
         }
         //this is a method that receives a message and stores it in a string
@@ -69,7 +74,7 @@ public class Client extends JFrame{
 		//showMessage(receivedMessage1);
 		showMessage("Server: " + new String(receivePacket.getData()) + "\n");
 		return receivePacket; 
-	}
+	}*/
 	//this method sends a message to connected clients
         private void sendMessage(String message){
                 //String message = new String(packet.getData());
@@ -77,20 +82,18 @@ public class Client extends JFrame{
 		try
 		{
 			byte [] dataToSend = message.getBytes();
-			byte [] data = String.valueOf(i).getBytes();
 			int dataLength = dataToSend.length;
-			//InetAddress IP = InetAddress.getByName(serverIP);
 			InetAddress IP = InetAddress.getLocalHost();
-			int portNo = 17;
+			int portNo = 9999;
 		
 			DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
 		
 			clientSocket.send(sendPacket);
-			System.out.println("Sent to " + new String (sendPacket.getData()));
+			System.out.println("Listening at local Port: " + clientSocket.getLocalPort());
 			showMessage("Client: " + message);
 		}catch(IOException e){
-			//chatWindow.append("There was a problem sending the message");
-			System.out.println("Whats wrong with my code g");
+			chatWindow.append("There was a problem sending the message");
+			//System.out.println("Whats wrong with my code g");
 		}
         }
 	//this method creates a new thread that appends a message to the gui
@@ -102,7 +105,7 @@ public class Client extends JFrame{
 				}
 			}
 		);
-	}*/
+	}
                 
 }
 
