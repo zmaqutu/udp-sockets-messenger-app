@@ -11,16 +11,20 @@ import java.net.InetAddress;
 public class Server extends JFrame{
 	private JTextField userText;
 	private JTextArea chatWindow;
-	private DatagramSocket serverSocket;
+	//private static DatagramSocket serverSocket;
+	private InetAddress clientIP;
+	private DatagramPacket receivedPacket;
 
 	//Constructor
-	public Server(){
+	public Server()throws IOException{
 		super("UCT Messenger");
-		this.userText = new JTextField();
+		userText = new JTextField();
+		//this.serverSocket = new DatagramSocket();
 		userText.addActionListener(
 			new ActionListener(){
 				public void actionPerformed(ActionEvent event){
-					showMessage("Server: " + event.getActionCommand());		//using showMessage temporarily
+					//sendMessage("Server: " + event.getActionCommand());		//using showMessage temporarily
+					System.out.println("Hypothetica message sent");
 					userText.setText("");
 				}
 			} 
@@ -33,48 +37,74 @@ public class Server extends JFrame{
 	}
 
 	//setup and run the server, this will be called after GUI is setup
-	public void startRunning(){
-		try{
-			serverSocket = new DatagramSocket(9999);
+	public void startRunning()throws IOException{
+		DatagramSocket serverSocket = new DatagramSocket(9999);
+			Scanner scan = new Scanner(System.in);
 			while(true){
-				try{
-					DatagramPacket packet = receiveMessage();
-				}catch(EOFException e){
-					showMessage("\n Server Ended the Connection");
-				}finally{
-					//close();
-				}
+					byte [] dataReceived = new byte[1024];
+					//To use a socket we use DatagramSocket 
+					//to send / recieve the data we use DatagramPackets
+					DatagramPacket receivePacket = new DatagramPacket(dataReceived,dataReceived.length);
+					serverSocket.receive(receivePacket);
+					String str = new String(receivePacket.getData());
+					
+					System.out.println("Client: " + str);
+					
+
+					String square = scan.nextLine();
+
+					// now send the data the square back use similar code to client side
+					byte [] dataToSendBack = (square + "").getBytes();
+					//dataLength					
+					int dataLength = dataToSendBack.length;
+					//ipAddress
+					InetAddress IP = receivePacket.getAddress();
+					//portNumber
+					int portNo = receivePacket.getPort();
+        				DatagramPacket sendPacket = new DatagramPacket(dataToSendBack,dataLength,IP,portNo);
+                			serverSocket.send(sendPacket);
 			}
-		}catch (IOException e){
-			e.printStackTrace();
-		}
 	}
 	//this is a method that receives a message and stores it in a string
-	public DatagramPacket receiveMessage() throws IOException{
+/*	public DatagramPacket receiveMessage() throws IOException{
 		byte [] dataReceived = new byte[1024];		//the data will be received as an array of bytes
 		
 		DatagramPacket receivePacket = new DatagramPacket(dataReceived,dataReceived.length);
-                serverSocket.receive(receivePacket);
+		
+		System.out.println(serverSocket.getLocalPort());
 
+		serverSocket.receive(receivePacket);
+
+                System.out.println(receivePacket.getPort());
+		System.out.println("Package received at port" +receivePacket.getPort());
 		//String receivedMessage = String(receivePacket.getData());
 		//showMessage(receivedMessage1);
-		showMessage("Client: " + new String(receivePacket.getData()));
+		//clientIP = receivePacket.getAddress();
+		//System.out.println("Message received from " + clientIP);
+		//showMessage("Client: " + new String(receivePacket.getData()));
 		return receivePacket; 
 
 
 	}
 	//this method sends a message to connected clients
-	private void sendMessage(String message, DatagramPacket packet) throws IOException{
+	private void sendMessage(String message){
 		//String message = new String(packet.getData());
 		
-		byte [] dataToSend = packet.getData();
-		int dataLength = dataToSend.length;
-		InetAddress IP = packet.getAddress();
-		int portNo = packet.getPort();
+		try{
+			byte [] dataToSend = message.getBytes();
+			int dataLength = dataToSend.length;
+			InetAddress IP = receivedPacket.getAddress();
+			//InetAddress IP = clientIP;
+			
+			System.out.println("Port to send to is: " + IP);
+			int portNo = receivedPacket.getPort();
 
-		DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
-		serverSocket.send(sendPacket);
-		showMessage(message);
+			DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
+			serverSocket.send(sendPacket);
+			showMessage(message);
+		}catch(IOException e){
+			chatWindow.append("Unable to send to client \n");
+		}
 	}
 	//this method creates a new thread that appends a message to the gui
 	public void showMessage(final String message){
@@ -85,7 +115,7 @@ public class Server extends JFrame{
 					}
 				}
 		);
-	}
+	}*/
 	
 	
 }
