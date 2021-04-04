@@ -1,7 +1,9 @@
 import java.io.*;
 import java.util.Scanner;
+import java.util.Date;
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.net.DatagramPacket;
@@ -11,7 +13,17 @@ import java.net.InetAddress;
 public class Client extends JFrame{
         private JTextField userText;
         private JTextArea chatWindow;
-        private DatagramSocket clientSocket;
+        private JPanel contentPane;
+	private JPanel headerBanner;
+	private JLabel bannerLabel;
+	private JPanel inputHeader;
+	private JLabel portLabel;
+	private JLabel nameLabel;
+	private JPanel panelSouth;
+	private JButton sendButton;
+	private JTextField userName;
+
+	private DatagramSocket clientSocket;
 	private String serverIP;
 	private int i = 8;
 
@@ -19,9 +31,63 @@ public class Client extends JFrame{
         public Client(String host){
                 super("UCT Messenger Client");
 		this.serverIP = host;
-                this.userText = new JTextField();
-		//this.clientSocket = new DatagramSocket();
-                userText.addActionListener(
+                //this.userText = new JTextField();
+                
+		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setBounds(100, 100, 570, 400);
+		contentPane = new JPanel();
+		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		setContentPane(contentPane);
+		contentPane.setLayout(new BorderLayout(0, 0));
+		
+		
+		headerBanner = new JPanel();
+		contentPane.add(headerBanner, BorderLayout.NORTH);
+		headerBanner.setLayout(new BorderLayout(0, 0));
+
+		bannerLabel = new JLabel("CHAT CLIENT");
+		bannerLabel.setHorizontalAlignment(SwingConstants.CENTER);
+		bannerLabel.setFont(new Font("Tahoma", Font.PLAIN, 40));
+		headerBanner.add(bannerLabel, BorderLayout.NORTH);
+
+		inputHeader = new JPanel();
+		headerBanner.add(inputHeader, BorderLayout.SOUTH);
+		inputHeader.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
+		nameLabel = new JLabel("username");
+		inputHeader.add(nameLabel);
+
+		userName = new JTextField();
+		userName.setColumns(10);
+		inputHeader.add(userName);
+
+
+                JScrollPane scrollPane = new JScrollPane();
+		contentPane.add(scrollPane,BorderLayout.CENTER);
+
+		chatWindow = new JTextArea();
+		chatWindow.setBackground(Color.BLACK);
+		chatWindow.setForeground(Color.WHITE);
+		chatWindow.setLineWrap(true);
+		scrollPane.setViewportView(chatWindow);
+
+		panelSouth = new JPanel();
+		FlowLayout fl_panelSouth = (FlowLayout) panelSouth.getLayout();
+		fl_panelSouth.setAlignment(FlowLayout.RIGHT);
+		contentPane.add(panelSouth, BorderLayout.SOUTH);
+
+
+		userText = new JTextField();
+		panelSouth.add(userText);
+		userText.setColumns(35);
+
+		sendButton = new JButton("SEND");
+		sendButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		panelSouth.add(sendButton);
+
+		
+		
+		
+		userText.addActionListener(
                         new ActionListener(){
                                 public void actionPerformed(ActionEvent event){
 					sendMessage(event.getActionCommand());	
@@ -29,10 +95,9 @@ public class Client extends JFrame{
                                 }
                         } 
                 );
-                add(userText,BorderLayout.NORTH);
-                chatWindow = new JTextArea();
-                add(new JScrollPane(chatWindow));
-                setSize(500,500);
+                //add(userText,BorderLayout.NORTH);
+                //chatWindow = new JTextArea();
+                //setSize(500,500);
                 setVisible(true);
         }
 	//setup and run the server, this will be called after GUI is setup
