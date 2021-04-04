@@ -1,6 +1,9 @@
 import java.io.*;
 import javax.swing.JFrame;
 import java.util.Scanner;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.Color;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -13,6 +16,23 @@ public class serverDriver {
 
 		Server udpServer = new Server();
 		udpServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		udpServer.startRunning();
+		
+		udpServer.startButton.addActionListener(  
+                        new ActionListener(){
+                                public void actionPerformed(ActionEvent event){
+                                       if(udpServer.startButton.getText().equals("START")){ 
+						udpServer.statusLabel.setText("server running");
+						udpServer.startButton.setText("Stop");
+                                        	udpServer.statusLabel.setBackground(new Color(0,255,0));
+				       }
+				       else{  
+					       udpServer.statusLabel.setText("server offline");
+					       udpServer.startButton.setText("START");
+					       udpServer.statusLabel.setBackground(new Color(220,20,60));
+				       }
+                                }
+                        } 
+                );
+		//udpServer.startRunning();
 	}
 }

@@ -18,8 +18,8 @@ public class Server extends JFrame{
 	private JPanel contentPane;
         private JLabel bannerLabel;
 	private JPanel panelSouth;
-	private JLabel statusLabel; 
-        private JButton startButton;
+	public JLabel statusLabel; 
+        public JButton startButton;
 
 
 	private DatagramSocket serverSocket;
@@ -53,6 +53,12 @@ public class Server extends JFrame{
 		startButton = new JButton("START");
 		startButton.setOpaque(false);
 		startButton.setFont(new Font("Tahoma", Font.PLAIN, 25));
+		startButton.addActionListener(
+                        new ActionListener(){
+                                public void actionPerformed(ActionEvent event){
+                                }
+                        } 
+                );
 		//server run status
 		statusLabel = new JLabel("Server offline");
 		statusLabel.setBorder(new LineBorder(new Color(0,0,0),2));
@@ -98,6 +104,15 @@ public class Server extends JFrame{
 		chatWindow.setForeground(Color.WHITE);
 		chatWindow.setLineWrap(true);
 		scrollPane.setViewportView(chatWindow);
+
+		/*startButton.addActionListener(  
+                        new ActionListener(){
+                                public void actionPerformed(ActionEvent event){
+					statusLabel.setText("server running");
+					statusLabel.setBackground(new Color(0,255,0));
+                                }
+                        } 
+                );*/
 		
 		
 		
