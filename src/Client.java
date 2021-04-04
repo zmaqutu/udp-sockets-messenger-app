@@ -44,6 +44,7 @@ public class Client extends JFrame{
 		headerBanner = new JPanel();
 		contentPane.add(headerBanner, BorderLayout.NORTH);
 		headerBanner.setLayout(new BorderLayout(0, 0));
+		headerBanner.setBackground(Color.YELLOW);
 
 		bannerLabel = new JLabel("CHAT CLIENT");
 		bannerLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -55,6 +56,7 @@ public class Client extends JFrame{
 		inputHeader.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		nameLabel = new JLabel("username");
 		inputHeader.add(nameLabel);
+		inputHeader.setBackground(Color.GRAY);
 
 		userName = new JTextField();
 		userName.setColumns(10);
