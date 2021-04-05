@@ -138,26 +138,29 @@ public class Server extends JFrame{
 	//setup and run the server, this will be called after GUI is setup
 	public void startRunning()throws IOException{
 		serverSocket = new DatagramSocket(9999);
-		loginSocket = new DatagramSocket(1776);
+		//loginSocket = new DatagramSocket(1776);
 		Scanner scan = new Scanner(System.in);
 		while(true){
-			/*byte [] loginData = new byte[1024];
-			String [] loginDetails = new String[2];
+			byte [] loginData = new byte[1024];
+			//String [] loginDetails = new String[2];
+			//
 
-			DatagramPacket loginPacket = new DatagramPacket(loginData,loginData.length);
-			loginSocket.receive(loginPacket);
-			String loginStr = new String(loginPacket.getData());
+			DatagramPacket loginPacket = new DatagramPacket(loginData,loginData.length);	
+			serverSocket.receive(loginPacket);
+
+			String userName = new String(loginPacket.getData());
+			
+			/*String loginStr = new String(loginPacket.getData());
 			loginDetails = loginStr.split(" ");
-			showMessage(loginDetails[0] + " has joined the chat" );*/
+			showMessage(loginDetails[0] + " has joined the chat" );
 			
 			byte [] dataReceived = new byte[1024];
 			//To use a socket we use DatagramSocket 
 			//to send / recieve the data we use DatagramPackets
 			receivePacket = new DatagramPacket(dataReceived,dataReceived.length);
-			serverSocket.receive(receivePacket);
 			String str = new String(receivePacket.getData());
 					
-			showMessage("Client :" + str);
+			showMessage("Client :" + str);*/
 					
 
 			/*String square = scan.nextLine();
@@ -172,6 +175,10 @@ public class Server extends JFrame{
 			int portNo = receivePacket.getPort();
         		DatagramPacket sendPacket = new DatagramPacket(dataToSendBack,dataLength,IP,portNo);
                 		serverSocket.send(sendPacket);*/
+			//Thread t = new clientHandler(serverSocket);
+			//t.start();
+			System.out.println(userName);
+			new Thread(new clientHandler(userName,serverSocket)).start();
 			}
 	}
 	//this is a method that receives a message and stores it in a string
@@ -225,6 +232,33 @@ public class Server extends JFrame{
 					}
 				}
 		);
+	}
+	public class clientHandler implements Runnable{
+        	private DatagramSocket clientSocket;
+        	private String userName;
+        	//constructor
+        	public clientHandler(String name, DatagramSocket socket) throws IOException{
+                	//super();
+                	this.clientSocket = socket;             //this is my socket that will be receiving messages
+                	this.userName = name;
+        	}
+        	@Override
+        	public void run(){
+                	try{
+                        	while(true){
+                                	byte [] dataToReceive = new byte[1024];
+                                	DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
+                                	clientSocket.receive(receivePacket);
+                                
+					String str = new String(receivePacket.getData());
+
+                                	System.out.println(userName + " : " + str);
+                                	//showMessage(userName +" : " + str);
+                        	}
+                	}catch(Exception e){
+                        	e.printStackTrace();
+                	}
+        	}
 	}
 	
 	

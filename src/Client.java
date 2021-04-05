@@ -126,7 +126,7 @@ public class Client extends JFrame{
                         DatagramPacket sendPacket = new DatagramPacket(data,dataLength,IP,9999);
                         clientSocket.send(sendPacket);
 
-			System.out.println("Client: " + message);*/
+			System.out.println("Client: " + message);
 
                         //After sending, accept response
                 	byte [] dataToReceive = new byte[1024];
@@ -137,7 +137,8 @@ public class Client extends JFrame{
 
                         System.out.println("Client is getting packets from: " + receivePacket.getAddress());
 			showMessage("Server: " + str);
-			//System.out.println("Server: " + str);
+			//System.out.println("Server: " + str);*/
+			//Thread t = new clientHandler().start();
                 }
         }
         //this is a method that receives a message and stores it in a string
@@ -166,14 +167,13 @@ public class Client extends JFrame{
 			DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
 		
 			clientSocket.send(sendPacket);
-			System.out.println("Listening at local Port: " + clientSocket.getLocalPort());
 			showMessage(userName.getText() + " : " + message);
 		}catch(IOException e){
 			chatWindow.append("There was a problem sending the message");
 			//System.out.println("Whats wrong with my code g");
 		}
         }
-	public void login(String name){
+	/*public void login(String name){
 		String loginStr = name + " 9999";			//userName + port number
 		try{
 			byte [] loginData = loginStr.getBytes();
@@ -187,7 +187,7 @@ public class Client extends JFrame{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-	}
+	}*/
 	//this method creates a new thread that appends a message to the gui
 	public void showMessage(final String message){
 		SwingUtilities.invokeLater(
