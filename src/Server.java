@@ -138,7 +138,7 @@ public class Server extends JFrame{
 	//setup and run the server, this will be called after GUI is setup
 	public void startRunning()throws IOException{
 		serverSocket = new DatagramSocket(9999);
-		//loginSocket = new DatagramSocket(1776);
+		loginSocket = new DatagramSocket(1776);
 		Scanner scan = new Scanner(System.in);
 		while(true){
 			byte [] loginData = new byte[1024];
@@ -146,7 +146,7 @@ public class Server extends JFrame{
 			//
 
 			DatagramPacket loginPacket = new DatagramPacket(loginData,loginData.length);	
-			serverSocket.receive(loginPacket);
+			loginSocket.receive(loginPacket);
 
 			String userName = new String(loginPacket.getData());
 			
@@ -241,6 +241,8 @@ public class Server extends JFrame{
                 	//super();
                 	this.clientSocket = socket;             //this is my socket that will be receiving messages
                 	this.userName = name;
+			System.out.println(userName + " has just joined the chat");
+			showMessage(userName + " has just joined the chat");
         	}
         	@Override
         	public void run(){
@@ -253,7 +255,7 @@ public class Server extends JFrame{
 					String str = new String(receivePacket.getData());
 
                                 	System.out.println(userName + " : " + str);
-                                	//showMessage(userName +" : " + str);
+                                	showMessage(userName +": " + str);
                         	}
                 	}catch(Exception e){
                         	e.printStackTrace();

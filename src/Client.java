@@ -173,8 +173,8 @@ public class Client extends JFrame{
 			//System.out.println("Whats wrong with my code g");
 		}
         }
-	/*public void login(String name){
-		String loginStr = name + " 9999";			//userName + port number
+	public void login(String name){
+		String loginStr = name;			//userName + port number
 		try{
 			byte [] loginData = loginStr.getBytes();
 			int dataLength = loginData.length;
@@ -187,7 +187,7 @@ public class Client extends JFrame{
 		}catch(IOException e){
 			e.printStackTrace();
 		}
-	}*/
+	}
 	//this method creates a new thread that appends a message to the gui
 	public void showMessage(final String message){
 		SwingUtilities.invokeLater(
