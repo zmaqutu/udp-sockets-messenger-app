@@ -23,6 +23,7 @@ public class Server extends JFrame{
 
 
 	private DatagramSocket serverSocket;
+	private DatagramSocket loginSocket;
 	private InetAddress clientIP;
 	private DatagramPacket receivePacket;
 
@@ -137,30 +138,40 @@ public class Server extends JFrame{
 	//setup and run the server, this will be called after GUI is setup
 	public void startRunning()throws IOException{
 		serverSocket = new DatagramSocket(9999);
-			Scanner scan = new Scanner(System.in);
-			while(true){
-					byte [] dataReceived = new byte[1024];
-					//To use a socket we use DatagramSocket 
-					//to send / recieve the data we use DatagramPackets
-					receivePacket = new DatagramPacket(dataReceived,dataReceived.length);
-					serverSocket.receive(receivePacket);
-					String str = new String(receivePacket.getData());
+		loginSocket = new DatagramSocket(1776);
+		Scanner scan = new Scanner(System.in);
+		while(true){
+			/*byte [] loginData = new byte[1024];
+			String [] loginDetails = new String[2];
+
+			DatagramPacket loginPacket = new DatagramPacket(loginData,loginData.length);
+			loginSocket.receive(loginPacket);
+			String loginStr = new String(loginPacket.getData());
+			loginDetails = loginStr.split(" ");
+			showMessage(loginDetails[0] + " has joined the chat" );*/
+			
+			byte [] dataReceived = new byte[1024];
+			//To use a socket we use DatagramSocket 
+			//to send / recieve the data we use DatagramPackets
+			receivePacket = new DatagramPacket(dataReceived,dataReceived.length);
+			serverSocket.receive(receivePacket);
+			String str = new String(receivePacket.getData());
 					
-					showMessage("Client :" + str);
+			showMessage("Client :" + str);
 					
 
-					/*String square = scan.nextLine();
+			/*String square = scan.nextLine();
 
-					// now send the data the square back use similar code to client side
-					byte [] dataToSendBack = (square + "").getBytes();
-					//dataLength					
-					int dataLength = dataToSendBack.length;
-					//ipAddress
-					InetAddress IP = receivePacket.getAddress();
-					//portNumber
-					int portNo = receivePacket.getPort();
-        				DatagramPacket sendPacket = new DatagramPacket(dataToSendBack,dataLength,IP,portNo);
-                			serverSocket.send(sendPacket);*/
+			// now send the data the square back use similar code to client side
+			byte [] dataToSendBack = (square + "").getBytes();
+			//dataLength					
+			int dataLength = dataToSendBack.length;
+			//ipAddress
+			InetAddress IP = receivePacket.getAddress();
+			//portNumber
+			int portNo = receivePacket.getPort();
+        		DatagramPacket sendPacket = new DatagramPacket(dataToSendBack,dataLength,IP,portNo);
+                		serverSocket.send(sendPacket);*/
 			}
 	}
 	//this is a method that receives a message and stores it in a string

@@ -23,7 +23,7 @@ public class serverDriver {
                                        if(udpServer.startButton.getText().equals("START")){ 
 						udpServer.statusLabel.setText("server running");
 						udpServer.startButton.setText("Stop");
-                                        	udpServer.statusLabel.setBackground(new Color(0,255,0));
+                                        	udpServer.statusLabel.setBackground(new Color(0,150,0));
 				       }
 				       else{  
 					       udpServer.statusLabel.setText("server offline");
@@ -33,6 +33,7 @@ public class serverDriver {
                                 }
                         } 
                 );
-		//udpServer.startRunning();
+		
+		udpServer.startRunning();
 	}
 }
