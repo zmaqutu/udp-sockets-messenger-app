@@ -14,18 +14,23 @@ public class Client extends JFrame{
         public JTextField userText;
         private JTextArea chatWindow;
         private JPanel contentPane;
+
 	private JPanel headerBanner;
 	private JLabel bannerLabel;
+	
 	private JPanel inputHeader;
-	private JLabel portLabel;
-	private JLabel nameLabel;
+	private JLabel userNameLabel;
+	public JTextField userName;
+	private JLabel recipientLabel;
+	public JTextField recipientName;
+	public JButton loginButton;
+	
 	private JPanel panelSouth;
 	private JButton sendButton;
-	public JButton loginButton;
-	public JTextField userName;
 
 	private DatagramSocket clientSocket;
 	private DatagramSocket loginSocket;
+	private DatagramSocket receiveSocket;
 	private String serverIP;
 	private int i = 8;
 
@@ -57,15 +62,22 @@ public class Client extends JFrame{
 		inputHeader = new JPanel();
 		headerBanner.add(inputHeader, BorderLayout.SOUTH);
 		inputHeader.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
-		nameLabel = new JLabel("username");
-		inputHeader.add(nameLabel);
+		
+		userNameLabel = new JLabel("username");
+		inputHeader.add(userNameLabel);
 		inputHeader.setBackground(new Color(135,135,135));
 
 		userName = new JTextField();
 		userName.setColumns(10);
 		inputHeader.add(userName);
 
-		loginButton = new JButton("Login");
+		recipientLabel = new JLabel("send to");
+		inputHeader.add(recipientLabel);
+		recipientName = new JTextField();
+		recipientName.setColumns(10);
+		inputHeader.add(recipientName);
+
+		loginButton = new JButton("chat with");
 		inputHeader.add(loginButton);
 		loginButton.setFont(new Font("Tahoma", Font.PLAIN, 12));
 
@@ -113,8 +125,17 @@ public class Client extends JFrame{
                 
 		clientSocket = new DatagramSocket();
 		loginSocket = new DatagramSocket();
+		//receiveSocket = new DatagramSocket(1996);
+
 		Scanner scan = new Scanner(System.in);
                 while(true){
+			/*byte [] receivedData = new byte[1024];
+			DatagramPacket receivedPacket = new DatagramPacket(receivedData,receivedData.length);
+			clientSocket.receive(receivedPacket);
+			String receivedMessage = new String(receivedPacket.getData());
+			showMessage(receivedMessage);*/
+			messageHandler handleMessage = new messageHandler(clientSocket);
+			new Thread(handleMessage).start();
                 }
         }
 	//this method sends a message to connected clients
@@ -158,6 +179,54 @@ public class Client extends JFrame{
 				}
 			}
 		);
+	}
+	public class messageHandler implements Runnable{
+                private DatagramSocket messageSocket;
+                public String userName;
+                private String recipient;
+                public InetAddress IP;
+                int portNo;
+                //constructor
+                public messageHandler(DatagramSocket socket) throws IOException{
+                        //super();
+                        this.messageSocket = socket;             //this is my socket that will be receiving messages
+                        /*this.userName = name;
+                        this.recipient = sendingTo;
+                        this.IP = userIP;
+                        this.portNo = userPortNo;
+                        System.out.println(userName + " has just joined the chat");
+                        showMessage(userName + " has just joined the chat");*/
+                }
+                //getters
+                public String getUserName(){
+                        return this.userName;
+                }
+                public String getRecipient(){
+                        return this.recipient;
+                }
+                public InetAddress getIP(){
+                        return IP;
+                }
+                public int getPortNo(){
+                        return portNo;
+                }
+		@Override
+		public void run(){
+                        try{
+                                while(true){
+                                        byte [] dataToReceive = new byte[1024];
+                                        DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
+                                        messageSocket.receive(receivePacket);
+
+                                        String str = new String(receivePacket.getData());
+
+                                        System.out.println(str);
+                                        //showMessage(str);
+                                }
+                        }catch(Exception e){
+                                e.printStackTrace();
+                        }
+                }
 	}
                 
 }

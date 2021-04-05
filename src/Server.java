@@ -1,6 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -21,7 +21,7 @@ public class Server extends JFrame{
 	private JPanel panelSouth;
 	public JLabel statusLabel; 
         public JButton startButton;
-	private ArrayList<clientHandler> connected = new ArrayList<clientHandler>();
+	private HashMap<String,clientHandler> connected = new HashMap<>();
 
 
 	private DatagramSocket serverSocket;
@@ -125,27 +125,31 @@ public class Server extends JFrame{
 			//System.out.println("IP: " + ip);
 			//System.out.println("Port: " + loginPacket.getPort());
 
-			String userName = new String(loginPacket.getData());
+			String [] chatInfo = new String(loginPacket.getData()).split(" ");
+			String userName = chatInfo[0];
+			String recipientName = chatInfo[1];
 
-			clientHandler userProfile = new clientHandler(userName,serverSocket,loginPacket.getAddress(),loginPacket.getPort());
+			clientHandler userProfile = new clientHandler(userName,recipientName,serverSocket,loginPacket.getAddress(),loginPacket.getPort());
 
 			new Thread(userProfile).start();
-			connected.add(userProfile);
-			}
+			connected.put(userProfile.userName,userProfile);
+			sendMessage(userProfile.getUserName(),userProfile.getRecipient());
+		}
 	}
 	//this method sends a message to connected clients
-	private void sendMessage(String message){
+	private void sendMessage(String message, String recipient){
 		
 		try{
 			byte [] dataToSend = message.getBytes();
 			int dataLength = dataToSend.length;
-			InetAddress IP = receivePacket.getAddress();
 			
-			int portNo = receivePacket.getPort();
-
-			DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
-			serverSocket.send(sendPacket);
-			showMessage(message);
+			if(connected.get(recipient) != null){
+				InetAddress IP = connected.get(recipient).getIP();
+				int portNo = 1996;
+				DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
+				serverSocket.send(sendPacket);
+				//showMessage(message);
+			}
 		}catch(IOException e){
 			chatWindow.append("Unable to send to client \n");
 		}
@@ -163,18 +167,33 @@ public class Server extends JFrame{
 	public class clientHandler implements Runnable{
         	private DatagramSocket clientSocket;
         	public String userName;
+		private String recipient;
 		public InetAddress IP;
 		int portNo;
         	//constructor
-        	public clientHandler(String name, DatagramSocket socket,InetAddress userIP,int userPortNo) throws IOException{
+        	public clientHandler(String name,String sendingTo, DatagramSocket socket,InetAddress userIP,int userPortNo) throws IOException{
                 	//super();
                 	this.clientSocket = socket;             //this is my socket that will be receiving messages
                 	this.userName = name;
+			this.recipient = sendingTo;
 			this.IP = userIP;
 			this.portNo = userPortNo;
 			System.out.println(userName + " has just joined the chat");
 			showMessage(userName + " has just joined the chat");
         	}
+		//getters
+		public String getUserName(){
+			return this.userName;
+		}
+		public String getRecipient(){
+			return this.recipient;
+		}
+		public InetAddress getIP(){
+			return IP;
+		}
+		public int getPortNo(){
+			return portNo;
+		}
         	@Override
         	public void run(){
                 	try{

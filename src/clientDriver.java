@@ -19,12 +19,13 @@ public class clientDriver {
 		udpClient.loginButton.addActionListener(
                         new ActionListener(){
                                 public void actionPerformed(ActionEvent event){
-                                       if(udpClient.loginButton.getText().equals("Login")){
+                                       if(udpClient.loginButton.getText().equals("chat with")){
                                                 udpClient.userText.setEditable(true);
 						udpClient.userName.setEditable(false);
+						udpClient.recipientName.setEditable(false);
 						udpClient.loginButton.setText("Welcome");
 						udpClient.loginButton.setEnabled(false);
-						udpClient.login(udpClient.userName.getText());
+						udpClient.login(udpClient.userName.getText() + " " + udpClient.recipientName.getText());
                                        }
                                 }
                         }
