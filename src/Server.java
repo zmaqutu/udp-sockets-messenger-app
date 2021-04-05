@@ -1,5 +1,6 @@
 import java.io.*;
 import java.util.Scanner;
+import java.util.ArrayList;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -20,6 +21,7 @@ public class Server extends JFrame{
 	private JPanel panelSouth;
 	public JLabel statusLabel; 
         public JButton startButton;
+	private ArrayList<clientHandler> connected = new ArrayList<clientHandler>();
 
 
 	private DatagramSocket serverSocket;
@@ -119,26 +121,29 @@ public class Server extends JFrame{
 			DatagramPacket loginPacket = new DatagramPacket(loginData,loginData.length);	
 			loginSocket.receive(loginPacket);
 
+			InetAddress ip = loginPacket.getAddress();
+			//System.out.println("IP: " + ip);
+			//System.out.println("Port: " + loginPacket.getPort());
+
 			String userName = new String(loginPacket.getData());
 
-			new Thread(new clientHandler(userName,serverSocket)).start();
+			clientHandler userProfile = new clientHandler(userName,serverSocket,loginPacket.getAddress(),loginPacket.getPort());
+
+			new Thread(userProfile).start();
+			connected.add(userProfile);
 			}
 	}
 	//this method sends a message to connected clients
 	private void sendMessage(String message){
-		//String message = new String(packet.getData());
 		
 		try{
 			byte [] dataToSend = message.getBytes();
 			int dataLength = dataToSend.length;
 			InetAddress IP = receivePacket.getAddress();
-			//InetAddress IP = clientIP;
 			
 			int portNo = receivePacket.getPort();
-			System.out.println("Port to send to is: " + portNo);
 
 			DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
-			System.out.println("Working till here");
 			serverSocket.send(sendPacket);
 			showMessage(message);
 		}catch(IOException e){
@@ -157,12 +162,16 @@ public class Server extends JFrame{
 	}
 	public class clientHandler implements Runnable{
         	private DatagramSocket clientSocket;
-        	private String userName;
+        	public String userName;
+		public InetAddress IP;
+		int portNo;
         	//constructor
-        	public clientHandler(String name, DatagramSocket socket) throws IOException{
+        	public clientHandler(String name, DatagramSocket socket,InetAddress userIP,int userPortNo) throws IOException{
                 	//super();
                 	this.clientSocket = socket;             //this is my socket that will be receiving messages
                 	this.userName = name;
+			this.IP = userIP;
+			this.portNo = userPortNo;
 			System.out.println(userName + " has just joined the chat");
 			showMessage(userName + " has just joined the chat");
         	}
