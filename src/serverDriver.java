@@ -10,8 +10,6 @@ import java.net.InetAddress;
 public class serverDriver {
 
 	public static void main(String [] args) throws Exception{
-		//socket to accept data at port 9999
-		//DatagramSocket serverSocket = new DatagramSocket(9999);
 		Scanner scan = new Scanner(System.in);	
 
 		Server udpServer = new Server();

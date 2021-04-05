@@ -94,7 +94,6 @@ public class Server extends JFrame{
 		panelSouth.setLayout(gl_panel);
 
 
-		//contentPane.add(startButton, BorderLayout.SOUTH);
 
 		//text on the chat window
 		JScrollPane scrollPane = new JScrollPane();
@@ -106,32 +105,6 @@ public class Server extends JFrame{
 		chatWindow.setLineWrap(true);
 		scrollPane.setViewportView(chatWindow);
 
-		/*startButton.addActionListener(  
-                        new ActionListener(){
-                                public void actionPerformed(ActionEvent event){
-					statusLabel.setText("server running");
-					statusLabel.setBackground(new Color(0,255,0));
-                                }
-                        } 
-                );*/
-		
-		
-		
-		/*userText.addActionListener(
-			new ActionListener(){
-				public void actionPerformed(ActionEvent event){
-					//sendMessage(event.getActionCommand());		//using showMessage temporarily
-					System.out.println(event.getActionCommand());
-					//userText.setText("");
-				}
-			} 
-		);*/
-
-
-		//add(userText,BorderLayout.NORTH);
-		//chatWindow = new JTextArea();
-		//add(new JScrollPane(chatWindow));
-		//setSize(500,500);
 		setVisible(true);
 	}
 
@@ -142,66 +115,15 @@ public class Server extends JFrame{
 		Scanner scan = new Scanner(System.in);
 		while(true){
 			byte [] loginData = new byte[1024];
-			//String [] loginDetails = new String[2];
-			//
 
 			DatagramPacket loginPacket = new DatagramPacket(loginData,loginData.length);	
 			loginSocket.receive(loginPacket);
 
 			String userName = new String(loginPacket.getData());
-			
-			/*String loginStr = new String(loginPacket.getData());
-			loginDetails = loginStr.split(" ");
-			showMessage(loginDetails[0] + " has joined the chat" );
-			
-			byte [] dataReceived = new byte[1024];
-			//To use a socket we use DatagramSocket 
-			//to send / recieve the data we use DatagramPackets
-			receivePacket = new DatagramPacket(dataReceived,dataReceived.length);
-			String str = new String(receivePacket.getData());
-					
-			showMessage("Client :" + str);*/
-					
 
-			/*String square = scan.nextLine();
-
-			// now send the data the square back use similar code to client side
-			byte [] dataToSendBack = (square + "").getBytes();
-			//dataLength					
-			int dataLength = dataToSendBack.length;
-			//ipAddress
-			InetAddress IP = receivePacket.getAddress();
-			//portNumber
-			int portNo = receivePacket.getPort();
-        		DatagramPacket sendPacket = new DatagramPacket(dataToSendBack,dataLength,IP,portNo);
-                		serverSocket.send(sendPacket);*/
-			//Thread t = new clientHandler(serverSocket);
-			//t.start();
-			System.out.println(userName);
 			new Thread(new clientHandler(userName,serverSocket)).start();
 			}
 	}
-	//this is a method that receives a message and stores it in a string
-/*	public DatagramPacket receiveMessage() throws IOException{
-		byte [] dataReceived = new byte[1024];		//the data will be received as an array of bytes
-		
-		DatagramPacket receivePacket = new DatagramPacket(dataReceived,dataReceived.length);
-		
-		System.out.println(serverSocket.getLocalPort());
-
-		serverSocket.receive(receivePacket);
-
-                System.out.println(receivePacket.getPort());
-		System.out.println("Package received at port" +receivePacket.getPort());
-		//String receivedMessage = String(receivePacket.getData());
-		//showMessage(receivedMessage1);
-		//clientIP = receivePacket.getAddress();
-		//System.out.println("Message received from " + clientIP);
-		//showMessage("Client: " + new String(receivePacket.getData()));
-		return receivePacket; 
-
-
-	}*/
 	//this method sends a message to connected clients
 	private void sendMessage(String message){
 		//String message = new String(packet.getData());

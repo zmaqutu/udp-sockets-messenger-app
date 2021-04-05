@@ -106,9 +106,6 @@ public class Client extends JFrame{
                                 }
                         } 
                 );
-                //add(userText,BorderLayout.NORTH);
-                //chatWindow = new JTextArea();
-                //setSize(500,500);
                 setVisible(true);
         }
 	//setup and run the server, this will be called after GUI is setup
@@ -118,45 +115,10 @@ public class Client extends JFrame{
 		loginSocket = new DatagramSocket();
 		Scanner scan = new Scanner(System.in);
                 while(true){
-			/*String message = scan.nextLine();
-                        //Datagram Packet's constructor takes three agruments data, dataLength,IP address, PortNumber
-			byte [] data = message.getBytes();
-                        int dataLength = data.length;
-                        InetAddress IP = InetAddress.getLocalHost();
-                        DatagramPacket sendPacket = new DatagramPacket(data,dataLength,IP,9999);
-                        clientSocket.send(sendPacket);
-
-			System.out.println("Client: " + message);
-
-                        //After sending, accept response
-                	byte [] dataToReceive = new byte[1024];
-                        DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
-                        clientSocket.receive(receivePacket);
-
-                        String str = new String(receivePacket.getData());
-
-                        System.out.println("Client is getting packets from: " + receivePacket.getAddress());
-			showMessage("Server: " + str);
-			//System.out.println("Server: " + str);*/
-			//Thread t = new clientHandler().start();
                 }
         }
-        //this is a method that receives a message and stores it in a string
-        /*public DatagramPacket receiveMessage() throws IOException{
-		byte [] dataReceived = new byte[1024];          //the data will be received as an array of bytes
-                
-		DatagramPacket receivePacket = new DatagramPacket(dataReceived,dataReceived.length);
-		clientSocket.receive(receivePacket);
-
-		//String receivedMessage = String(receivePacket.getData());
-		//showMessage(receivedMessage1);
-		showMessage("Server: " + new String(receivePacket.getData()) + "\n");
-		return receivePacket; 
-	}*/
 	//this method sends a message to connected clients
         public void sendMessage(String message){
-                //String message = new String(packet.getData());
-                
 		try
 		{
 			byte [] dataToSend = message.getBytes();
@@ -170,7 +132,6 @@ public class Client extends JFrame{
 			showMessage(userName.getText() + " : " + message);
 		}catch(IOException e){
 			chatWindow.append("There was a problem sending the message");
-			//System.out.println("Whats wrong with my code g");
 		}
         }
 	public void login(String name){
