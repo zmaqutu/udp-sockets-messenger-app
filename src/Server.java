@@ -26,6 +26,7 @@ public class Server extends JFrame{
 
 	private DatagramSocket serverSocket;
 	private DatagramSocket loginSocket;
+	private DatagramSocket sendSocket;
 	private InetAddress clientIP;
 	private DatagramPacket receivePacket;
 
@@ -114,43 +115,46 @@ public class Server extends JFrame{
 	public void startRunning()throws IOException{
 		serverSocket = new DatagramSocket(9999);
 		loginSocket = new DatagramSocket(1776);
+		sendSocket = new DatagramSocket();
 		Scanner scan = new Scanner(System.in);
 		while(true){
 			byte [] loginData = new byte[1024];
 
 			DatagramPacket loginPacket = new DatagramPacket(loginData,loginData.length);	
 			loginSocket.receive(loginPacket);
-
-			InetAddress ip = loginPacket.getAddress();
-			//System.out.println("IP: " + ip);
-			//System.out.println("Port: " + loginPacket.getPort());
+	
 
 			String [] chatInfo = new String(loginPacket.getData()).split(" ");
-			String userName = chatInfo[0];
-			String recipientName = chatInfo[1];
+			String userName = chatInfo[0].trim();
+			String recipientName = chatInfo[1].trim();
+			InetAddress ip = loginPacket.getAddress();
+			int portNo = Integer.valueOf(chatInfo[2].trim());
 
-			clientHandler userProfile = new clientHandler(userName,recipientName,serverSocket,loginPacket.getAddress(),loginPacket.getPort());
 
+			clientHandler userProfile = new clientHandler(userName,recipientName,serverSocket,loginPacket.getAddress(),portNo);
+
+			
+			connected.put(userName,userProfile);
 			new Thread(userProfile).start();
-			connected.put(userProfile.userName,userProfile);
-			sendMessage(userProfile.getUserName(),userProfile.getRecipient());
+			//sendMessage(userProfile.getUserName(),userProfile.getRecipient());
 		}
 	}
 	//this method sends a message to connected clients
-	private void sendMessage(String message, String recipient){
+	private void sendMessage(String message, String who){
 		
 		try{
 			byte [] dataToSend = message.getBytes();
 			int dataLength = dataToSend.length;
+				
+			InetAddress IP = connected.get(who).getIP();
+			System.out.println("IP: " + IP);
+			//int portNo = 1996;
+			int portNo = connected.get(who).getPortNo();
+			DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
 			
-			if(connected.get(recipient) != null){
-				InetAddress IP = connected.get(recipient).getIP();
-				int portNo = 1996;
-				DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
-				serverSocket.send(sendPacket);
-				//showMessage(message);
-			}
-		}catch(IOException e){
+			sendSocket.send(sendPacket);
+			showMessage(message);
+	}catch(IOException e){
 			chatWindow.append("Unable to send to client \n");
 		}
 	}
@@ -168,15 +172,15 @@ public class Server extends JFrame{
         	private DatagramSocket clientSocket;
         	public String userName;
 		private String recipient;
-		public InetAddress IP;
+		public InetAddress userIP;
 		int portNo;
         	//constructor
-        	public clientHandler(String name,String sendingTo, DatagramSocket socket,InetAddress userIP,int userPortNo) throws IOException{
+        	public clientHandler(String name,String sendingTo, DatagramSocket socket,InetAddress IP,int userPortNo) throws IOException{
                 	//super();
                 	this.clientSocket = socket;             //this is my socket that will be receiving messages
                 	this.userName = name;
 			this.recipient = sendingTo;
-			this.IP = userIP;
+			this.userIP = IP;
 			this.portNo = userPortNo;
 			System.out.println(userName + " has just joined the chat");
 			showMessage(userName + " has just joined the chat");
@@ -189,7 +193,7 @@ public class Server extends JFrame{
 			return this.recipient;
 		}
 		public InetAddress getIP(){
-			return IP;
+			return userIP;
 		}
 		public int getPortNo(){
 			return portNo;
@@ -205,7 +209,8 @@ public class Server extends JFrame{
 					String str = new String(receivePacket.getData());
 
                                 	System.out.println(userName + " : " + str);
-                                	showMessage(userName +": " + str);
+                                	//showMessage(userName +": " + str);
+					sendMessage(str,recipient);
                         	}
                 	}catch(Exception e){
                         	e.printStackTrace();

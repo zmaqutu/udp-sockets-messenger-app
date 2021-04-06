@@ -25,7 +25,7 @@ public class clientDriver {
 						udpClient.recipientName.setEditable(false);
 						udpClient.loginButton.setText("Welcome");
 						udpClient.loginButton.setEnabled(false);
-						udpClient.login(udpClient.userName.getText() + " " + udpClient.recipientName.getText());
+						udpClient.login(udpClient.userName.getText(),udpClient.recipientName.getText());
                                        }
                                 }
                         }

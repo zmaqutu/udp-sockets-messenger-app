@@ -125,18 +125,9 @@ public class Client extends JFrame{
                 
 		clientSocket = new DatagramSocket();
 		loginSocket = new DatagramSocket();
-		//receiveSocket = new DatagramSocket(1996);
+		receiveSocket = new DatagramSocket();
 
-		Scanner scan = new Scanner(System.in);
-                while(true){
-			/*byte [] receivedData = new byte[1024];
-			DatagramPacket receivedPacket = new DatagramPacket(receivedData,receivedData.length);
-			clientSocket.receive(receivedPacket);
-			String receivedMessage = new String(receivedPacket.getData());
-			showMessage(receivedMessage);*/
-			messageHandler handleMessage = new messageHandler(clientSocket);
-			new Thread(handleMessage).start();
-                }
+		new Thread(new messageHandler()).start();
         }
 	//this method sends a message to connected clients
         public void sendMessage(String message){
@@ -155,8 +146,10 @@ public class Client extends JFrame{
 			chatWindow.append("There was a problem sending the message");
 		}
         }
-	public void login(String name){
-		String loginStr = name;			//userName + port number
+	public void login(String name, String recip){
+		String localPort = receiveSocket.getLocalPort() + "";
+		System.out.println("Local Port/: " + localPort);
+		String loginStr = name + " " + recip + " " + localPort;			//userName + port number
 		try{
 			byte [] loginData = loginStr.getBytes();
 			int dataLength = loginData.length;
@@ -187,9 +180,9 @@ public class Client extends JFrame{
                 public InetAddress IP;
                 int portNo;
                 //constructor
-                public messageHandler(DatagramSocket socket) throws IOException{
+                public messageHandler() throws IOException{
                         //super();
-                        this.messageSocket = socket;             //this is my socket that will be receiving messages
+                        //this.messageSocket = socket;             //this is my socket that will be receiving messages
                         /*this.userName = name;
                         this.recipient = sendingTo;
                         this.IP = userIP;
@@ -216,12 +209,11 @@ public class Client extends JFrame{
                                 while(true){
                                         byte [] dataToReceive = new byte[1024];
                                         DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
-                                        messageSocket.receive(receivePacket);
+                                        receiveSocket.receive(receivePacket);
 
                                         String str = new String(receivePacket.getData());
 
-                                        System.out.println(str);
-                                        //showMessage(str);
+                                        showMessage(str);
                                 }
                         }catch(Exception e){
                                 e.printStackTrace();
