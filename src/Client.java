@@ -141,7 +141,7 @@ public class Client extends JFrame{
 			DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
 		
 			clientSocket.send(sendPacket);
-			showMessage(userName.getText() + " : " + message);
+			//showMessage(userName.getText() + " : " + message);
 		}catch(IOException e){
 			chatWindow.append("There was a problem sending the message");
 		}
@@ -207,13 +207,21 @@ public class Client extends JFrame{
 		public void run(){
                         try{
                                 while(true){
-                                        byte [] dataToReceive = new byte[1024];
+                                        byte [] dataToReceive = new byte[2048];
                                         DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
                                         receiveSocket.receive(receivePacket);
 
-                                        String str = new String(receivePacket.getData());
+                                        String bleh = new String(receivePacket.getData());
+					System.out.println("hehe: " +  bleh) ;
+					String [] packetData = new String(receivePacket.getData()).split("\n");
+					System.out.println(packetData.length);
+					String message = packetData[0];
+					String sender = packetData[1];
+					//String myName = packetData[2].trim();
 
-                                        showMessage(str);
+                                        //System.out.println(message + " bitch");
+					showMessage("[" + sender + "]: " + message );
+					//showMessage(message);
                                 }
                         }catch(Exception e){
                                 e.printStackTrace();

@@ -140,16 +140,17 @@ public class Server extends JFrame{
 		}
 	}
 	//this method sends a message to connected clients
-	private void sendMessage(String message, String who){
+	private void sendMessage(String message, String sender,String recipient){
 		
 		try{
-			byte [] dataToSend = message.getBytes();
+			
+			String messageInfo = message + "\n" + sender + "\n" + recipient;
+			byte [] dataToSend = messageInfo.getBytes();
 			int dataLength = dataToSend.length;
 				
-			InetAddress IP = connected.get(who).getIP();
-			System.out.println("IP: " + IP);
+			InetAddress IP = connected.get(recipient).getIP();
 			//int portNo = 1996;
-			int portNo = connected.get(who).getPortNo();
+			int portNo = connected.get(recipient).getPortNo();
 			DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
 			
 			sendSocket.send(sendPacket);
@@ -208,9 +209,13 @@ public class Server extends JFrame{
                                 
 					String str = new String(receivePacket.getData());
 
-                                	System.out.println(userName + " : " + str);
+                                	//System.out.println(userName + " : " + str);
                                 	//showMessage(userName +": " + str);
-					sendMessage(str,recipient);
+					str.trim();
+					System.out.println("str " + str);
+					System.out.println("recipient " + recipient);
+					sendMessage(str,userName,recipient);
+					sendMessage(str,userName,userName);
                         	}
                 	}catch(Exception e){
                         	e.printStackTrace();
