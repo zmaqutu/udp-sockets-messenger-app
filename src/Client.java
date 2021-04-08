@@ -1,6 +1,8 @@
 import java.io.*;
 import java.util.Scanner;
 import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -211,16 +213,17 @@ public class Client extends JFrame{
                                         DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
                                         receiveSocket.receive(receivePacket);
 
-                                        String bleh = new String(receivePacket.getData());
-					System.out.println("hehe: " +  bleh) ;
 					String [] packetData = new String(receivePacket.getData()).split("\n");
-					System.out.println(packetData.length);
 					String message = packetData[0];
 					String sender = packetData[1];
 					//String myName = packetData[2].trim();
 
                                         //System.out.println(message + " bitch");
-					showMessage("[" + sender + "]: " + message );
+					DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
+					DateFormat forTime = new SimpleDateFormat("hh:mm:ss");
+
+					Date localDate = new Date();
+					showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message );
 					//showMessage(message);
                                 }
                         }catch(Exception e){
