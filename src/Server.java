@@ -135,9 +135,21 @@ public class Server extends JFrame{
 
 
 			clientHandler userProfile = new clientHandler(userName,recipientName,serverSocket,loginPacket.getAddress(),portNo);
-
-			
+                        
+                        
 			connected.put(userName,userProfile);
+
+			//if the person you want to chat with in connected/online send them a message that you are online
+			//else send yourself message telling you they arent online
+			if(connected.containsKey(recipientName)){
+				String joinNotification = userName + " has just joined the chat";
+				sendMessage(joinNotification,"Server",recipientName);
+			}
+			else{
+				String offlineMessage = recipientName + " is unable to receive your messages at the moment (offline)"; 
+				sendMessage(offlineMessage,"Server",userName);
+			}
+			
 			new Thread(userProfile).start();
 			//sendMessage(userProfile.getUserName(),userProfile.getRecipient());
 		}
@@ -161,6 +173,7 @@ public class Server extends JFrame{
 			chatWindow.append("Unable to send to client \n");
 		}
 	}
+	//this method broadcasts a message to everyone connected to the server
 	//this method creates a new thread that appends a message to the gui
 	public void showMessage(final String message){
 		SwingUtilities.invokeLater(
@@ -186,11 +199,13 @@ public class Server extends JFrame{
 			this.userIP = IP;
 			this.portNo = userPortNo;
 
-			DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
+			DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
                         //DateFormat forTime = new SimpleDateFormat("hh:mm:ss");
 
                         Date localDate = new Date();
 			System.out.println(userName + " has just joined the chat");
+			//String joinNotification = name + " has just joined the chat";
+			//sendMessage(joinNotification,"Server",sendingTo);
 			showMessage("["+ dateTimeFormat.format(localDate) + "] " + "[Server]: "  + userName + " has just joined the chat");
         	}
 		//getters
