@@ -203,19 +203,21 @@ public class Server extends JFrame{
         	public void run(){
                 	try{
                         	while(true){
-                                	byte [] dataToReceive = new byte[1024];
+                                	byte [] dataToReceive = new byte[2048];
                                 	DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
                                 	clientSocket.receive(receivePacket);
                                 
-					String str = new String(receivePacket.getData());
+					String [] packetData = new String(receivePacket.getData()).split("\n");
+                                        String message = packetData[0];
+                                        String sender = packetData[1];
 
                                 	//System.out.println(userName + " : " + str);
                                 	//showMessage(userName +": " + str);
-					str.trim();
-					System.out.println("str " + str);
+					message.trim();
+					System.out.println("str " + message);
 					System.out.println("recipient " + recipient);
-					sendMessage(str,userName,recipient);
-					sendMessage(str,userName,userName);
+					sendMessage(message,sender,recipient);
+					sendMessage(message,sender,sender);
                         	}
                 	}catch(Exception e){
                         	e.printStackTrace();

@@ -115,7 +115,7 @@ public class Client extends JFrame{
 		userText.addActionListener(
                         new ActionListener(){
                                 public void actionPerformed(ActionEvent event){
-					sendMessage(event.getActionCommand());	
+					sendMessage(event.getActionCommand(),userName.getText(),recipientName.getText());	
                                         userText.setText("");
                                 }
                         } 
@@ -132,10 +132,11 @@ public class Client extends JFrame{
 		new Thread(new messageHandler()).start();
         }
 	//this method sends a message to connected clients
-        public void sendMessage(String message){
+        public void sendMessage(String message, String sender, String recipient){
 		try
 		{
-			byte [] dataToSend = message.getBytes();
+			String messageInfo = message + "\n" + sender + "\n" + recipient;
+			byte [] dataToSend = messageInfo.getBytes();
 			int dataLength = dataToSend.length;
 			InetAddress IP = InetAddress.getLocalHost();
 			int portNo = 9999;
@@ -218,7 +219,6 @@ public class Client extends JFrame{
 					String sender = packetData[1];
 					//String myName = packetData[2].trim();
 
-                                        //System.out.println(message + " bitch");
 					DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
 					DateFormat forTime = new SimpleDateFormat("hh:mm:ss");
 
