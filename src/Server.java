@@ -1,6 +1,9 @@
 import java.io.*;
 import java.util.Scanner;
 import java.util.HashMap;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.awt.*;
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -154,7 +157,6 @@ public class Server extends JFrame{
 			DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
 			
 			sendSocket.send(sendPacket);
-			showMessage(message);
 	}catch(IOException e){
 			chatWindow.append("Unable to send to client \n");
 		}
@@ -183,8 +185,13 @@ public class Server extends JFrame{
 			this.recipient = sendingTo;
 			this.userIP = IP;
 			this.portNo = userPortNo;
+
+			DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
+                        //DateFormat forTime = new SimpleDateFormat("hh:mm:ss");
+
+                        Date localDate = new Date();
 			System.out.println(userName + " has just joined the chat");
-			showMessage(userName + " has just joined the chat");
+			showMessage("["+ dateTimeFormat.format(localDate) + "] " + "[Server]: "  + userName + " has just joined the chat");
         	}
 		//getters
 		public String getUserName(){
@@ -211,11 +218,13 @@ public class Server extends JFrame{
                                         String message = packetData[0];
                                         String sender = packetData[1];
 
-                                	//System.out.println(userName + " : " + str);
-                                	//showMessage(userName +": " + str);
 					message.trim();
-					System.out.println("str " + message);
-					System.out.println("recipient " + recipient);
+
+					DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
+                        
+					Date localDate = new Date();
+
+					showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message);
 					sendMessage(message,sender,recipient);
 					sendMessage(message,sender,sender);
                         	}

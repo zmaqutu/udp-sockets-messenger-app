@@ -161,7 +161,11 @@ public class Client extends JFrame{
 
 			DatagramPacket loginPacket = new DatagramPacket(loginData,dataLength,IP,portNo);
 			loginSocket.send(loginPacket);
-			showMessage("Welcome to the chat " + name);
+			DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
+			//DateFormat forTime = new SimpleDateFormat("hh:mm:ss");
+
+			Date localDate = new Date();
+			showMessage("[" + dateTimeFormat.format(localDate) + "] " + "Welcome to your chat with " + recip + ", " + name);
 		}catch(IOException e){
 			e.printStackTrace();
 		}
