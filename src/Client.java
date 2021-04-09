@@ -21,6 +21,7 @@ public class Client extends JFrame{
 	private JLabel bannerLabel;
 	
 	private JPanel inputHeader;
+	public JButton groupChatButton;
 	private JLabel userNameLabel;
 	public JTextField userName;
 	private JLabel recipientLabel;
@@ -32,6 +33,7 @@ public class Client extends JFrame{
 
 	private DatagramSocket clientSocket;
 	private DatagramSocket loginSocket;
+	private DatagramSocket groupSocket;
 	private DatagramSocket receiveSocket;
 	private String serverIP;
 	private int i = 8;
@@ -43,7 +45,7 @@ public class Client extends JFrame{
                 //this.userText = new JTextField();
                 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 570, 400);
+		setBounds(100, 100, 650, 400);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setBackground(new Color(200,200,0));
@@ -65,6 +67,10 @@ public class Client extends JFrame{
 		headerBanner.add(inputHeader, BorderLayout.SOUTH);
 		inputHeader.setLayout(new FlowLayout(FlowLayout.RIGHT, 5, 5));
 		
+		groupChatButton = new JButton("Join group chat");
+                groupChatButton.setBackground(new Color(96,154,75));
+                inputHeader.add(groupChatButton,BorderLayout.EAST);
+
 		userNameLabel = new JLabel("username");
 		inputHeader.add(userNameLabel);
 		inputHeader.setBackground(new Color(135,135,135));
@@ -112,6 +118,16 @@ public class Client extends JFrame{
 		
 		
 		
+		groupChatButton.addActionListener(
+			new ActionListener(){
+				public void actionPerformed(ActionEvent event){
+					recipientName.setText("GROUP");
+					recipientName.setEditable(false);
+					groupChatButton.setEnabled(false);
+				}
+			} 
+		);
+
 		userText.addActionListener(
                         new ActionListener(){
                                 public void actionPerformed(ActionEvent event){

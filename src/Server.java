@@ -25,11 +25,13 @@ public class Server extends JFrame{
 	public JLabel statusLabel; 
         public JButton startButton;
 	private HashMap<String,clientHandler> connected = new HashMap<>();
+	private HashMap<String,clientHandler> groupChatUsers = new HashMap<>();
 
 
 	private DatagramSocket serverSocket;
 	private DatagramSocket loginSocket;
 	private DatagramSocket sendSocket;
+	//private DatagramSocket groupSocket;
 	private InetAddress clientIP;
 	private DatagramPacket receivePacket;
 
@@ -119,7 +121,7 @@ public class Server extends JFrame{
 		serverSocket = new DatagramSocket(9999);
 		loginSocket = new DatagramSocket(1776);
 		sendSocket = new DatagramSocket();
-		Scanner scan = new Scanner(System.in);
+
 		while(true){
 			byte [] loginData = new byte[1024];
 
@@ -134,23 +136,35 @@ public class Server extends JFrame{
 			int portNo = Integer.valueOf(chatInfo[2].trim());
 
 
-			clientHandler userProfile = new clientHandler(userName,recipientName,serverSocket,loginPacket.getAddress(),portNo);
-                        
-                        
-			connected.put(userName,userProfile);
+			if(recipientName.equals("GROUP")){
+				clientHandler groupUser = new clientHandler(userName,"GROUP",serverSocket,ip,portNo);
+				groupChatUsers.put(userName,groupUser);
 
-			//if the person you want to chat with in connected/online send them a message that you are online
-			//else send yourself message telling you they arent online
-			if(connected.containsKey(recipientName)){
-				String joinNotification = userName + " has just joined the chat";
-				sendMessage(joinNotification,"Server",recipientName);
+				if(groupChatUsers.size() > 1){
+					String gcWelcome = userName + " has joined the group chat";
+					broadcastMessage(gcWelcome,"Server");				//notify groupchat member has joined
+				}
+				new Thread(groupUser).start();
 			}
 			else{
-				String offlineMessage = recipientName + " is unable to receive your messages at the moment (offline)"; 
-				sendMessage(offlineMessage,"Server",userName);
-			}
+				clientHandler userProfile = new clientHandler(userName,recipientName,serverSocket,ip,portNo);
+                        
+                        
+				connected.put(userName,userProfile);
+
+				//if the person you want to chat with in connected/online send them a message that you are online
+				//else send yourself message telling you they arent online
+				if(connected.containsKey(recipientName)){
+					String joinNotification = userName + " has just joined the chat";
+					sendMessage(joinNotification,"Server",recipientName);
+				}
+				else{
+					String offlineMessage = recipientName + " is unable to receive your messages at the moment (offline)"; 
+					sendMessage(offlineMessage,"Server",userName);
+				}
 			
-			new Thread(userProfile).start();
+				new Thread(userProfile).start();
+			}
 			//sendMessage(userProfile.getUserName(),userProfile.getRecipient());
 		}
 	}
@@ -171,6 +185,25 @@ public class Server extends JFrame{
 			sendSocket.send(sendPacket);
 	}catch(IOException e){
 			chatWindow.append("Unable to send to client \n");
+		}
+	}
+	private void broadcastMessage(String message, String sender){
+		String messageInfo = message + "\n" + sender;
+		byte [] dataToSend = messageInfo.getBytes();
+		int dataLength = dataToSend.length;
+
+		for(String userName : groupChatUsers.keySet()){
+			try{
+				InetAddress IP = groupChatUsers.get(userName).getIP();
+				int portNo = groupChatUsers.get(userName).getPortNo();
+
+				DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
+
+				sendSocket.send(sendPacket);
+			}catch(IOException e){
+				chatWindow.append("Unable to send messages to the group chat. Please try again");
+			}
+
 		}
 	}
 	//this method broadcasts a message to everyone connected to the server
@@ -206,8 +239,23 @@ public class Server extends JFrame{
 			System.out.println(userName + " has just joined the chat");
 			//String joinNotification = name + " has just joined the chat";
 			//sendMessage(joinNotification,"Server",sendingTo);
-			showMessage("["+ dateTimeFormat.format(localDate) + "] " + "[Server]: "  + userName + " has just joined the chat");
+			if(sendingTo.equals("GROUP")){
+				showMessage("["+ dateTimeFormat.format(localDate) + "] " + "[Server]: "  + userName + " has just joined the group chat");
+			}
+			else{
+				showMessage("["+ dateTimeFormat.format(localDate) + "] " + "[Server]: "  + userName + " has just joined the chat");
+			}
         	}
+		/*public clientHandler(String name, DatagramSocket socket,InetAddress IP, int userPortNo) throws IOException{
+			this.clientSocket = socket;
+			this.userName = name;
+			this.userIP = IP;
+			this.portNo = userPortNo;
+
+			DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+			Date localDate = new Date();
+			showMessage("["+ dateTimeFormat.format(localDate) + "] " + "[Server]: "  + userName + " has just joined the group chat");
+		}*/
 		//getters
 		public String getUserName(){
 			return this.userName;
@@ -232,16 +280,23 @@ public class Server extends JFrame{
 					String [] packetData = new String(receivePacket.getData()).split("\n");
                                         String message = packetData[0];
                                         String sender = packetData[1];
+					
 
 					message.trim();
 
-					DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
+					DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
                         
 					Date localDate = new Date();
 
-					showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message);
-					sendMessage(message,sender,recipient);
-					sendMessage(message,sender,sender);
+					if(recipient.equals("GROUP")){
+						broadcastMessage(message,sender);
+						showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + " to GROUP]: " + message);
+					}
+					else{
+						sendMessage(message,sender,recipient);
+						sendMessage(message,sender,sender);
+						showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message);
+					}
                         	}
                 	}catch(Exception e){
                         	e.printStackTrace();
