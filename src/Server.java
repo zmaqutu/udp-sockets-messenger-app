@@ -280,8 +280,10 @@ public class Server extends JFrame{
 					String [] packetData = new String(receivePacket.getData()).split("\n");
                                         String message = packetData[0];
                                         String sender = packetData[1];
-					
 
+					//TODO write a method that writes the message to a file in a sub directory for later reteival
+					//arguments message sender recipient 
+					
 					message.trim();
 
 					DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
@@ -291,11 +293,13 @@ public class Server extends JFrame{
 					if(recipient.equals("GROUP")){
 						broadcastMessage(message,sender);
 						showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + " to GROUP]: " + message);
+						//call the  method in here
 					}
 					else{
 						sendMessage(message,sender,recipient);
 						sendMessage(message,sender,sender);
 						showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message);
+						//and in here
 					}
                         	}
                 	}catch(Exception e){
