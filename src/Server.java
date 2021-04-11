@@ -190,12 +190,14 @@ public class Server extends JFrame{
 			byte [] dataToSend = messageInfo.getBytes();
 			int dataLength = dataToSend.length;
 				
-			InetAddress IP = connected.get(recipient).getIP();
-			//int portNo = 1996;
-			int portNo = connected.get(recipient).getPortNo();
-			DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
+			if(connected.containsKey(recipient)){
+				InetAddress IP = connected.get(recipient).getIP();
+				//int portNo = 1996;
+				int portNo = connected.get(recipient).getPortNo();
+				DatagramPacket sendPacket = new DatagramPacket(dataToSend,dataLength,IP,portNo);
 			
-			sendSocket.send(sendPacket);
+				sendSocket.send(sendPacket);
+			}
 	}catch(IOException e){
 			chatWindow.append("Unable to send to client \n");
 		}
