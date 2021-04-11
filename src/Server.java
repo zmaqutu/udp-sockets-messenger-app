@@ -246,16 +246,6 @@ public class Server extends JFrame{
 				showMessage("["+ dateTimeFormat.format(localDate) + "] " + "[Server]: "  + userName + " has just joined the chat");
 			}
         	}
-		/*public clientHandler(String name, DatagramSocket socket,InetAddress IP, int userPortNo) throws IOException{
-			this.clientSocket = socket;
-			this.userName = name;
-			this.userIP = IP;
-			this.portNo = userPortNo;
-
-			DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
-			Date localDate = new Date();
-			showMessage("["+ dateTimeFormat.format(localDate) + "] " + "[Server]: "  + userName + " has just joined the group chat");
-		}*/
 		//getters
 		public String getUserName(){
 			return this.userName;
@@ -268,6 +258,37 @@ public class Server extends JFrame{
 		}
 		public int getPortNo(){
 			return portNo;
+		}
+		public void writeChatToLogs(String message){
+			String userDirectory = "../chat_logs/" + userName + "/";	
+			String userFileName = "../chat_logs/" + userName + "/" + recipient + ".txt";
+
+			String recipientDirectory = "../chat_logs/" + recipient + "/";
+                        String recipientFileName = "../chat_logs/" + recipient + "/" + userName + ".txt";
+			
+			File createUserDirectory = new File(userDirectory);
+			createUserDirectory.mkdir();
+
+			File createRecipientDir = new File(recipientDirectory);
+			createRecipientDir.mkdir();
+			
+			try{
+				DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+				Date localDate = new Date();
+				
+				FileWriter userFileWriter = new FileWriter(userFileName,true);
+				PrintWriter userOutputStream = new PrintWriter(userFileWriter);
+				userOutputStream.println("[" + dateTimeFormat.format(localDate) + "] " + " [" + userName + "]: " + message);
+				userOutputStream.close();
+
+				FileWriter recipientFileWriter = new FileWriter(recipientFileName,true);
+				PrintWriter recipientOutputStream = new PrintWriter(recipientFileWriter);
+				recipientOutputStream.println("[" + dateTimeFormat.format(localDate) + "] " + " [" + userName + "]: " + message);
+				recipientOutputStream.close();
+			}
+			catch(IOException e){
+				e.printStackTrace();
+			}
 		}
         	@Override
         	public void run(){
@@ -300,6 +321,7 @@ public class Server extends JFrame{
 						sendMessage(message,sender,sender);
 						showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message);
 						//and in here
+							writeChatToLogs(message);
 					}
                         	}
                 	}catch(Exception e){
