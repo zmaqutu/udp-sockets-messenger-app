@@ -35,6 +35,7 @@ public class Client extends JFrame{
 	private DatagramSocket loginSocket;
 	private DatagramSocket groupSocket;
 	private DatagramSocket receiveSocket;
+	private DatagramSocket retrieveSocket;
 	private String serverIP;
 	private int i = 8;
 
@@ -144,6 +145,7 @@ public class Client extends JFrame{
 		clientSocket = new DatagramSocket();
 		loginSocket = new DatagramSocket();
 		receiveSocket = new DatagramSocket();
+		//retrieveSocket = new DatagramSocket();
 
 		new Thread(new messageHandler()).start();
         }
@@ -166,9 +168,10 @@ public class Client extends JFrame{
 		}
         }
 	public void login(String name, String recip){
-		String localPort = receiveSocket.getLocalPort() + "";
+		String localPort = receiveSocket.getLocalPort() + "";	
+		//String rtrvPort = retrieveSocket.getLocalPort() + "";		//this is the port we will be sending retrieve messages to
 		System.out.println("Local Port/: " + localPort);
-		String loginStr = name + " " + recip + " " + localPort;			//userName + port number
+		String loginStr = name + "\n" + recip + "\n" + localPort;			//userName + port number
 		try{
 			byte [] loginData = loginStr.getBytes();
 			int dataLength = loginData.length;
@@ -182,6 +185,15 @@ public class Client extends JFrame{
 
 			Date localDate = new Date();
 			showMessage("[" + dateTimeFormat.format(localDate) + "] " + "Welcome to your chat with " + recip + ", " + name);
+
+			/*String eofFlag = "";
+			while(!eofFlag.equals("\0")){
+				byte [] dataToReceive = new byte[2048];
+				DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
+				receiveSocket.receive(receivePacket);
+				eofFlag = new String(receivePacket.getData()).trim();
+				showMessage(eofFlag);
+			}*/
 		}catch(IOException e){
 			e.printStackTrace();
 		}
@@ -235,16 +247,21 @@ public class Client extends JFrame{
                                         receiveSocket.receive(receivePacket);
 
 					String [] packetData = new String(receivePacket.getData()).split("\n");
-					String message = packetData[0];
-					String sender = packetData[1];
-					//String myName = packetData[2].trim();
+					if(packetData.length > 1){
+						String message = packetData[0];
+						String sender = packetData[1];
+						//String myName = packetData[2].trim();
 
-					DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
-					DateFormat forTime = new SimpleDateFormat("hh:mm:ss");
+						DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
+						DateFormat forTime = new SimpleDateFormat("hh:mm:ss");
 
-					Date localDate = new Date();
-					showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message );
-					//showMessage(message);
+						Date localDate = new Date();
+						showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message );
+						//showMessage(message);
+					}
+					else{
+						showMessage(packetData[0]);
+					}
                                 }
                         }catch(Exception e){
                                 e.printStackTrace();

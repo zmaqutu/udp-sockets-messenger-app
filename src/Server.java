@@ -129,11 +129,24 @@ public class Server extends JFrame{
 			loginSocket.receive(loginPacket);
 	
 
-			String [] chatInfo = new String(loginPacket.getData()).split(" ");
+			String [] chatInfo = new String(loginPacket.getData()).split("\n");
 			String userName = chatInfo[0].trim();
 			String recipientName = chatInfo[1].trim();
 			InetAddress ip = loginPacket.getAddress();
 			int portNo = Integer.valueOf(chatInfo[2].trim());
+			//int messagePort = Integer.valueOf(chatInfo[3].trim());
+
+
+			String fileName = "../chat_logs/" + userName + "/" + recipientName + ".txt";
+			File file = new File(fileName);
+			Scanner inputStream = new Scanner(file);
+			//a while loop that gets each line from chat logs and sends it to user retreiving them
+			while(inputStream.hasNextLine()){
+				//System.out.println(inputStream.nextLine());
+				byte [] chatData = inputStream.nextLine().getBytes();
+				DatagramPacket chatPacket = new DatagramPacket(chatData,chatData.length,ip,portNo);
+				sendSocket.send(chatPacket);
+			}
 
 
 			if(recipientName.equals("GROUP")){
@@ -321,7 +334,7 @@ public class Server extends JFrame{
 						sendMessage(message,sender,sender);
 						showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message);
 						//and in here
-							writeChatToLogs(message);
+						writeChatToLogs(message);
 					}
                         	}
                 	}catch(Exception e){
