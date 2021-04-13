@@ -185,8 +185,8 @@ public class Server extends JFrame{
 	private void sendMessage(String message, String sender,String recipient){
 		
 		try{
-			
-			String messageInfo = message + "\n" + sender + "\n" + recipient;
+			int hashedText = hashNumber(message);
+			String messageInfo = message + "\n" + sender + "\n" + recipient + "\n" + hashedText;
 			byte [] dataToSend = messageInfo.getBytes();
 			int dataLength = dataToSend.length;
 				
@@ -232,6 +232,15 @@ public class Server extends JFrame{
 				}
 		);
 	}
+	
+	public int hashNumber(String plainText) {
+		int sum = 0;
+		for (int i = 0; i < plainText.length(); i++) {
+			sum += plainText.charAt(i) * Math.pow(31, i);
+		}
+		return sum;
+	}
+	
 	public class clientHandler implements Runnable{
         	private DatagramSocket clientSocket;
         	public String userName;
@@ -316,28 +325,46 @@ public class Server extends JFrame{
 					String [] packetData = new String(receivePacket.getData()).split("\n");
                                         String message = packetData[0];
                                         String sender = packetData[1];
+                                        int hashedText = Integer.parseInt(packetData[3].trim());
 
 					//TODO write a method that writes the message to a file in a sub directory for later reteival
 					//arguments message sender recipient 
 					
 					message.trim();
-
-					DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+					
+					if (hashedText == hashNumber(message)) {// error detection: verify that messages are correctly received
+						
+						
+						if (recipient.equals("Server")) { //loss detection:verify/confirm that all messages sent are received
+							sendMessage("r","Server",message);// //tell Sender that message is reached Receiver
+						}
+						
+						DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
                         
-					Date localDate = new Date();
+						Date localDate = new Date();
 
-					if(recipient.equals("GROUP")){
-						broadcastMessage(message,sender);
-						showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + " to GROUP]: " + message);
-						//call the  method in here
+						if(recipient.equals("GROUP")){
+							broadcastMessage(message,sender);
+							showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + " to GROUP]: " + message);
+							//call the  method in here
+						}
+						else{
+							sendMessage("s","Server",sender);//tell Sender that message is reached Server
+							sendMessage(message,sender,recipient);
+							sendMessage(message,sender,sender);
+							showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message);
+							//and in here
+							writeChatToLogs(message);
+						}
+						
+						
+						
 					}
-					else{
-						sendMessage(message,sender,recipient);
-						sendMessage(message,sender,sender);
-						showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message);
-						//and in here
-						writeChatToLogs(message);
+					else {
+						showMessage("Original message was lost.");
 					}
+					
+
                         	}
                 	}catch(Exception e){
                         	e.printStackTrace();
