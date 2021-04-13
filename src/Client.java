@@ -11,6 +11,7 @@ import java.awt.event.ActionListener;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.lang.Math;
 
 public class Client extends JFrame{
         public JTextField userText;
@@ -153,7 +154,8 @@ public class Client extends JFrame{
         public void sendMessage(String message, String sender, String recipient){
 		try
 		{
-			String messageInfo = message + "\n" + sender + "\n" + recipient;
+			int hashedText = hashNumber(message); //to be used for error detection
+			String messageInfo = message + "\n" + sender + "\n" + recipient + "\n" + hashedText;
 			byte [] dataToSend = messageInfo.getBytes();
 			int dataLength = dataToSend.length;
 			InetAddress IP = InetAddress.getLocalHost();
@@ -208,6 +210,15 @@ public class Client extends JFrame{
 			}
 		);
 	}
+	
+	public int hashNumber(String plainText) {
+		int sum = 0;
+		for (int i = 0; i < plainText.length(); i++) {
+			sum += plainText.charAt(i) * Math.pow(31, i);
+		}
+		return sum;
+	}
+	
 	public class messageHandler implements Runnable{
                 private DatagramSocket messageSocket;
                 public String userName;
@@ -251,13 +262,33 @@ public class Client extends JFrame{
 						String message = packetData[0];
 						String sender = packetData[1];
 						//String myName = packetData[2].trim();
+						int hashedText = Integer.parseInt(packetData[3].trim());
+						
+						if (hashedText == hashNumber(message)) {// error detection: verify that messages are correctly received
+							
+							if (sender.equals("Server")) { //loss detection:verify/confirm that all messages sent are received
+								if (message == "s") {
+									showMessage("Your message was received by the Server.");
+								}
+								else if (message.equals("r")) {
+									showMessage("Your message was received by the Receiver.");
+								}
+							}
+							else {
+								sendMessage(sender,getUserName(),"Server");//tell Server that message is received
+								
+								DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
+								DateFormat forTime = new SimpleDateFormat("hh:mm:ss");
+	
+								Date localDate = new Date();
+								showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message);
+								//showMessage(message);
+							}
+						}
+						else {
+							showMessage("Original message was lost.");
+						}
 
-						DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");;
-						DateFormat forTime = new SimpleDateFormat("hh:mm:ss");
-
-						Date localDate = new Date();
-						showMessage("[" + dateTimeFormat.format(localDate) + "] " + " [" + sender + "]: " + message );
-						//showMessage(message);
 					}
 					else{
 						showMessage(packetData[0]);
