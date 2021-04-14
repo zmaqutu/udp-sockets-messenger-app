@@ -137,8 +137,8 @@ public class Server extends JFrame{
 			//int messagePort = Integer.valueOf(chatInfo[3].trim());
 
 
-			String fileName = "../chat_logs/" + userName + "/" + recipientName + ".txt";
-			String userDirectory = "../chat_logs/" + userName;
+			String fileName = "chat_logs/" + userName + "/" + recipientName + ".txt";
+			String userDirectory = "chat_logs/" + userName;
 			
 			File createUserDirectory = new File(userDirectory);
                         createUserDirectory.mkdir();
@@ -298,11 +298,11 @@ public class Server extends JFrame{
 			return portNo;
 		}
 		public void writeChatToLogs(String message){
-			String userDirectory = "../chat_logs/" + userName;	
-			String userFileName = "../chat_logs/" + userName + "/" + recipient + ".txt";
+			String userDirectory = "chat_logs/" + userName;	
+			String userFileName = "chat_logs/" + userName + "/" + recipient + ".txt";
 
-			String recipientDirectory = "../chat_logs/" + recipient;
-                        String recipientFileName = "../chat_logs/" + recipient + "/" + userName + ".txt";
+			String recipientDirectory = "chat_logs/" + recipient;
+                        String recipientFileName = "chat_logs/" + recipient + "/" + userName + ".txt";
 			
 			File createUserDirectory = new File(userDirectory);
 			createUserDirectory.mkdir();

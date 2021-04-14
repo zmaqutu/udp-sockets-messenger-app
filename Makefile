@@ -23,14 +23,16 @@ all:
 	@javac -d bin $(SRCDIR)/*.java
 clean:
 	rm $(BINDIR)/*.class
+	rm $(SRCDIR)/*.class
 
 #to run the makefile with arguments use the command 'make SequentialBasins ARGS="YOUR ARGUMENTS"'or ParallelBasins ARGS = "YOUR ARGUMENTS"
 
-runMessenger:
-	@java -cp bin MessengerApp
+runClient:
+	@java -cp bin clientDriver
 
 runServer:
-	@java -cp bin UDPServer
+	@java -cp bin serverDriver
+
 
 #Write a section that will generate and clean Javadoc 
 
