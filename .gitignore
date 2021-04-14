@@ -1,3 +1,6 @@
 *.pdf
 *.class
 /chat_logs
+*.gz
+*.mp4
+gitlog.txt
