@@ -1,4 +1,4 @@
-lign="center"> UDP Sockets Messenger App</h1>
+<h1 align="center"> UDP Sockets Messenger App</h1>
 
 <div align="center" >
   <img src="https://img.shields.io/badge/made%20by-Zongo%20Maqutu-blue?style=for-the-badge&labelColor=20232a" />
