@@ -1,6 +1,9 @@
 import java.io.*;
 import javax.swing.JFrame;
 import java.util.Scanner;
+import java.util.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.Color;
@@ -15,6 +18,10 @@ public class serverDriver {
 		Server udpServer = new Server();
 		udpServer.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
+		DateFormat dateTimeFormat = new SimpleDateFormat("yyyy/MM/dd hh:mm:ss");
+		Date localDate = new Date();
+		udpServer.showMessage("[" + dateTimeFormat.format(localDate) + "] " + "Welcome administrator ... click start to run the server");
+		
 		udpServer.startButton.addActionListener(  
                         new ActionListener(){
                                 public void actionPerformed(ActionEvent event){
@@ -22,6 +29,16 @@ public class serverDriver {
 						udpServer.statusLabel.setText("server running");
 						udpServer.startButton.setText("Stop");
                                         	udpServer.statusLabel.setBackground(new Color(0,150,0));
+						
+
+						udpServer.showMessage("Starting server ...");
+						try{
+							Thread.sleep(2000);
+						}
+						catch(InterruptedException e){
+							e.printStackTrace();
+						}
+						udpServer.showMessage("[" + dateTimeFormat.format(localDate) + "] " + "The server is now running and can receive messages");
 				       }
 				       else{  
 					       udpServer.statusLabel.setText("server offline");
@@ -31,7 +48,8 @@ public class serverDriver {
                                 }
                         } 
                 );
-		
+
 		udpServer.startRunning();
+		
 	}
 }

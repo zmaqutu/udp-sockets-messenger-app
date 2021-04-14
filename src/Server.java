@@ -138,7 +138,13 @@ public class Server extends JFrame{
 
 
 			String fileName = "../chat_logs/" + userName + "/" + recipientName + ".txt";
+			String userDirectory = "../chat_logs/" + userName;
+			
+			File createUserDirectory = new File(userDirectory);
+                        createUserDirectory.mkdir();
+
 			File file = new File(fileName);
+			file.createNewFile();
 			Scanner inputStream = new Scanner(file);
 			//a while loop that gets each line from chat logs and sends it to user retreiving them
 			while(inputStream.hasNextLine()){
@@ -179,6 +185,23 @@ public class Server extends JFrame{
 				new Thread(userProfile).start();
 			}
 			//sendMessage(userProfile.getUserName(),userProfile.getRecipient());
+			//
+			/*String fileName = "../chat_logs/" + userName + "/" + recipientName + ".txt";
+                        String userDirectory = "../chat_logs/" + userName;
+                        
+                        File createUserDirectory = new File(userDirectory);
+                        createUserDirectory.mkdir();
+
+                        File file = new File(fileName);
+			file.createNewFile();
+                        Scanner inputStream = new Scanner(file);
+                        //a while loop that gets each line from chat logs and sends it to user retreiving them
+                        while(inputStream.hasNextLine()){
+                                //System.out.println(inputStream.nextLine());
+                                byte [] chatData = inputStream.nextLine().getBytes();
+                                DatagramPacket chatPacket = new DatagramPacket(chatData,chatData.length,ip,portNo);
+                                sendSocket.send(chatPacket);
+                        }*/
 		}
 	}
 	//this method sends a message to connected clients
@@ -275,10 +298,10 @@ public class Server extends JFrame{
 			return portNo;
 		}
 		public void writeChatToLogs(String message){
-			String userDirectory = "../chat_logs/" + userName + "/";	
+			String userDirectory = "../chat_logs/" + userName;	
 			String userFileName = "../chat_logs/" + userName + "/" + recipient + ".txt";
 
-			String recipientDirectory = "../chat_logs/" + recipient + "/";
+			String recipientDirectory = "../chat_logs/" + recipient;
                         String recipientFileName = "../chat_logs/" + recipient + "/" + userName + ".txt";
 			
 			File createUserDirectory = new File(userDirectory);
