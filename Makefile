@@ -37,7 +37,7 @@ runServer:
 #Write a section that will generate and clean Javadoc 
 
 docs:
-	@javadoc -classpath bin/ d docs/ src/*.java
+	@javadoc -d docs/ src/*.java
 cleandocs:
-	@rm - r docs/*
+	@rm -r docs/
 

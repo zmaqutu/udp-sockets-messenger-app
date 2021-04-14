@@ -36,6 +36,11 @@ public class Server extends JFrame{
 	private DatagramPacket receivePacket;
 
 	//Constructor
+
+	/**
+	 * this constructor creates the server's GUI
+	 * @throws IOException
+	 */
 	public Server()throws IOException{
 		super("UCT Messenger");
 		
@@ -117,6 +122,13 @@ public class Server extends JFrame{
 	}
 
 	//setup and run the server, this will be called after GUI is setup
+
+	/**
+	 * this method is used to setup and run the server. This method is called after the GUI is setup
+	 * the method listens for a login packet then creates a clientHandler thread to process sending and
+	 * receiving messages
+	 * @throws IOException
+	 */
 	public void startRunning()throws IOException{
 		serverSocket = new DatagramSocket(9999);
 		loginSocket = new DatagramSocket(1776);
@@ -205,6 +217,13 @@ public class Server extends JFrame{
 		}
 	}
 	//this method sends a message to connected clients
+
+	/**
+	 * this method is called to send a message from one sender to the recipient
+	 * @param message - the message to be send
+	 * @param sender - the username of the person sending the message
+	 * @param recipient - the username of the person to recieve the message
+	 */
 	private void sendMessage(String message, String sender,String recipient){
 		
 		try{
@@ -225,6 +244,12 @@ public class Server extends JFrame{
 			chatWindow.append("Unable to send to client \n");
 		}
 	}
+
+	/**
+	 * this method is used during group chats to send a message to all participants of the group chat
+	 * @param message - the message to be sent to the group chat
+	 * @param sender - the username of the person sending the message
+	 */
 	private void broadcastMessage(String message, String sender){
 		String messageInfo = message + "\n" + sender;
 		byte [] dataToSend = messageInfo.getBytes();
@@ -246,6 +271,11 @@ public class Server extends JFrame{
 	}
 	//this method broadcasts a message to everyone connected to the server
 	//this method creates a new thread that appends a message to the gui
+
+	/**
+	 * This method appends a string message to the Server GUI's chat window
+	 * @param message - the message to be displayed on the screen
+	 */
 	public void showMessage(final String message){
 		SwingUtilities.invokeLater(
 				new Runnable(){
@@ -297,6 +327,12 @@ public class Server extends JFrame{
 		public int getPortNo(){
 			return portNo;
 		}
+
+		/**
+		 * This method writes each message string to a file which will be used when we want to retreive
+		 * messages from older chats
+		 * @param message
+		 */
 		public void writeChatToLogs(String message){
 			String userDirectory = "chat_logs/" + userName;	
 			String userFileName = "chat_logs/" + userName + "/" + recipient + ".txt";

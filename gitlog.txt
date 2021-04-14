@@ -1,0 +1,233 @@
+commit e6bf4548aa860c6df76cc8b25be69bde4c8c2420
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Wed Apr 14 06:13:51 2021 +0200
+
+    Removed bugs in readme layout
+
+commit 21613e67fe1c983820d0bd64ae8b600af3eec005
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Wed Apr 14 06:11:04 2021 +0200
+
+    Edited Readme.MD
+
+commit 8adb2a7c474edab6ba3317c9a3e8ba3b06e8c40a
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Wed Apr 14 05:50:53 2021 +0200
+
+    Both applications work with makefile now
+
+commit dae4d5273bc204c4748a397b3b97f2c106577fb4
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Wed Apr 14 03:45:36 2021 +0200
+
+    Added messages to server chatWindow
+
+commit 06d99cd5bd1c5925a39c193bcc4efa07b875f7dc
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Sun Apr 11 16:10:11 2021 +0200
+
+    Allowed user to retreive messages from when offline
+
+commit 1d35d39d0c88ba01002b7ad5a1f414293a851759
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Sun Apr 11 15:55:53 2021 +0200
+
+    Successfully Implemented Message retrieval
+
+commit 3475b466204f5de470f25e44e4f64834264415a6
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Sun Apr 11 13:48:14 2021 +0200
+
+    Added method to write chats to file for retreival
+
+commit 33f3ceff338f2d6b8e3544ddf33dfcf5222c5ec6
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Sat Apr 10 23:23:16 2021 +0200
+
+    Created space to write method to write to file
+
+commit 61980dc19e0b347721e7994faae26df566bc73e9
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Fri Apr 9 11:20:10 2021 +0200
+
+    Added Group Chat functionality
+
+commit 178bd738d2f90aa6ca5904f68f5d46132cabd865
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Thu Apr 8 19:55:31 2021 +0200
+
+    Added server notification when user joins chat
+
+commit 7713c6bd1a20fafe46551c9f55a89dccc5c307de
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Thu Apr 8 18:11:05 2021 +0200
+
+    Fixed output formatting error in Server
+
+commit e33e9c375b20c61a66902fd4cf637b15475daff5
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Thu Apr 8 17:21:07 2021 +0200
+
+    Fixed Message Double Send Bug
+
+commit 88136579cf0709333577c283f0df10d27d09576d
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Thu Apr 8 16:18:04 2021 +0200
+
+    Fixed DateTime stamp
+
+commit 87739109feb4e1861715b76f156d6a0023f06f9b
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Wed Apr 7 19:02:40 2021 +0200
+
+    Added response for each server send
+
+commit 98af32fb14f5483904d1a35f6173bc332f344bc1
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Tue Apr 6 18:49:57 2021 +0200
+
+    Fixed bug that prevented server sending to client
+
+commit 7ccacb0a50e21567323deba5b7f4bfdf9279e607
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Tue Apr 6 00:25:43 2021 +0200
+
+    Added receiveMessage thread to client
+
+commit 76847d01e4aaead050e721b80926d2004fcb38a0
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Mon Apr 5 22:01:06 2021 +0200
+
+    Added profile variables to clinetHandler constructor
+
+commit 27091a83a4f6abc8b160264b3c908a45d96c7876
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Mon Apr 5 20:37:29 2021 +0200
+
+    Removed commented code snippets
+
+commit 647eb72885c855a5431acc516f3b25a9906a7cf8
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Mon Apr 5 20:01:15 2021 +0200
+
+    Successfully 'registered' each new client as new object, chat send is working
+
+commit 00478311ebca4adafb71f5c692adc6dd8f573c71
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Mon Apr 5 18:36:50 2021 +0200
+
+    Implemented concurrency in receiving data
+
+commit 7496670a4a06153c0a3c5b92b5c9622f72c70dcb
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Mon Apr 5 15:06:04 2021 +0200
+
+    Added login method
+
+commit 8b25901d880ec05e47689a355f76518defeb81ff
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Sun Apr 4 17:13:56 2021 +0200
+
+    Added fuctionality to Start/Stop button
+
+commit 1afcc382c6be238d4cb2225234df50f1064dfe0f
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Sun Apr 4 15:42:15 2021 +0200
+
+    Reconstructed Server's UI, only chat functionality works
+
+commit 80a2c33c6549da4938f59356cbde1008a30e92b8
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Sun Apr 4 02:13:06 2021 +0200
+
+    Changed Client UI layout
+
+commit 4d4ed9b3adc2e4436dfaa38cf42d4d3a006db96a
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Sat Apr 3 23:21:14 2021 +0200
+
+    Fixed receiving data bug
+
+commit 33a59f96529c6034a8f2466f9d6ba3001f11a771
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Sat Apr 3 21:17:41 2021 +0200
+
+    Removed socket binding bug in driver program
+
+commit 19d3f7134f3e0d843fcc319c9910a0de3dd19be0
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Fri Apr 2 19:15:38 2021 +0200
+
+    Added sendMessage method in Client
+
+commit 53009a6e94ec093c1ef53989452ead311d962317
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Fri Apr 2 18:39:42 2021 +0200
+
+    Setup server with working GUI, now to set up client
+
+commit d57a60387e46d3967920ed8674f7cd5599a1b82f
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Fri Apr 2 18:07:33 2021 +0200
+
+    Added method to send messages
+
+commit d4a9dc23d57a942ea5062cace5cfb0a22147812d
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Fri Apr 2 16:33:10 2021 +0200
+
+    Added a method to append text to GUI
+
+commit 31c69dad93dbbe31799fe885721ad6901b9158f7
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Fri Apr 2 02:26:22 2021 +0200
+
+    Added Server method to receive a message
+
+commit 755804d6869a33f44cf685b940de4484351d5318
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Fri Apr 2 01:38:29 2021 +0200
+
+    Added Construcor for Server Class
+
+commit 972955c1c3d8f0d72fa64d02b88ed7b4dc66eabe
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Thu Apr 1 03:13:54 2021 +0200
+
+    Implemented one way server to client chat
+
+commit 9c2d98b099d8792653a40cb5eb33043e8ac9188a
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Thu Apr 1 01:46:28 2021 +0200
+
+    changed variable names to make sense
+
+commit e45ddb06d20f7469458b0362bf442a1829962298
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Wed Mar 31 22:59:59 2021 +0200
+
+    Successfully sent message to and from server
+
+commit 7e7f451b17fe935e2ead43fcd897ceea8374b86f
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Wed Mar 31 22:26:37 2021 +0200
+
+    Added Server Class to send data back to client
+
+commit 8899e394cfd0e5a38b40179397cd3f5a9c364bd5
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Wed Mar 31 04:27:08 2021 +0200
+
+    Fixed Makefile, added exec rule
+
+commit 3e38cd115474d2f2a003db49e48093882c0b86a4
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Wed Mar 31 04:12:35 2021 +0200
+
+    Slightly modified READMEset as Template
+
+commit 26d1b91ecc44962b8dbab9188b40a98433b4e7c9
+Author: Zongo Maqutu <MQTZON001@myuct.ac.za>
+Date:   Wed Mar 31 04:02:55 2021 +0200
+
+    Initialize repo. Setup file Structure

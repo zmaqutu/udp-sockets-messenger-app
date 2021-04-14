@@ -140,6 +140,12 @@ public class Client extends JFrame{
                 setVisible(true);
         }
 	//setup and run the server, this will be called after GUI is setup
+
+	/**
+	 * This is the first method to run in this class Creates a new messageHandler threads
+	 * which is responsible for receiving messages.
+	 * @throws IOException
+	 */
         public void startRunning()throws IOException{
                 
 		clientSocket = new DatagramSocket();
@@ -150,6 +156,13 @@ public class Client extends JFrame{
 		new Thread(new messageHandler()).start();
         }
 	//this method sends a message to connected clients
+
+	/**
+	 * This method sends a message to a specified recipient
+	 * @param message - the message that is to be sent
+	 * @param sender - the username of the person sending the message
+	 * @param recipient - the username of the person receiving the message
+	 */
         public void sendMessage(String message, String sender, String recipient){
 		try
 		{
@@ -167,6 +180,12 @@ public class Client extends JFrame{
 			chatWindow.append("There was a problem sending the message");
 		}
         }
+
+	/**
+	 * This method is meant to set up a clients session, an equivalent to loging in
+	 * @param name - the name of the person sending the message
+	 * @param recip - the name of the person recieving the message
+	 */
 	public void login(String name, String recip){
 		String localPort = receiveSocket.getLocalPort() + "";	
 		//String rtrvPort = retrieveSocket.getLocalPort() + "";		//this is the port we will be sending retrieve messages to
@@ -186,19 +205,17 @@ public class Client extends JFrame{
 			Date localDate = new Date();
 			showMessage("[" + dateTimeFormat.format(localDate) + "] " + "Welcome to your chat with " + recip + ", " + name);
 
-			/*String eofFlag = "";
-			while(!eofFlag.equals("\0")){
-				byte [] dataToReceive = new byte[2048];
-				DatagramPacket receivePacket = new DatagramPacket(dataToReceive,dataToReceive.length);
-				receiveSocket.receive(receivePacket);
-				eofFlag = new String(receivePacket.getData()).trim();
-				showMessage(eofFlag);
-			}*/
-		}catch(IOException e){
+		}
+		catch(IOException e){
 			e.printStackTrace();
 		}
 	}
 	//this method creates a new thread that appends a message to the gui
+
+	/**
+	 * This method appends the message to the GUI's chat window
+	 * @param message - the message to be displayed on the chat window
+	 */
 	public void showMessage(final String message){
 		SwingUtilities.invokeLater(
 			new Runnable(){
@@ -208,6 +225,11 @@ public class Client extends JFrame{
 			}
 		);
 	}
+
+	/**
+	 * This messageHandler is a subclass of Client. The run method listens for any incoming packets and decodes
+	 * them
+	 */
 	public class messageHandler implements Runnable{
                 private DatagramSocket messageSocket;
                 public String userName;
@@ -238,6 +260,8 @@ public class Client extends JFrame{
                 public int getPortNo(){
                         return portNo;
                 }
+
+
 		@Override
 		public void run(){
                         try{
